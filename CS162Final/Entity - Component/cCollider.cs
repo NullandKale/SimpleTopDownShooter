@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace nullEngine.Entity___Component
 {
-    class cCollider : iComponent
+    public class cCollider : iComponent
     {
         public renderable rRef;
         public Rectangle rect;
@@ -22,17 +22,23 @@ namespace nullEngine.Entity___Component
 
         public void Run(renderable r)
         {
-
+            rect.X = (int)r.pos.xPos;
+            rect.Y = (int)r.pos.yPos;
         }
 
         public bool collides(cCollider c1)
         {
-            if(this.rRef == null || c1.rRef == null)
+            if(this.rRef == null || c1.rRef == null || c1 == this)
             {
                 return false;
             }
 
             return rect.IntersectsWith(c1.rect);
+        }
+
+        public virtual void callback(cCollider c)
+        {
+
         }
     }
 }

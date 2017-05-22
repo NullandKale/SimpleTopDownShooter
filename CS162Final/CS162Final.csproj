@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Entity - Component\Button.cs" />
     <Compile Include="Entity - Component\cCollider.cs" />
+    <Compile Include="Entity - Component\cDeactivateOnCollide.cs" />
     <Compile Include="Entity - Component\iComponent.cs" />
     <Compile Include="Entity - Component\iRenderable.cs" />
     <Compile Include="Entity - Component\KeyboardControl.cs" />

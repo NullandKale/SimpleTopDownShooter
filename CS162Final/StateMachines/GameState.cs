@@ -12,16 +12,20 @@ namespace nullEngine.StateMachines
     {
         PauseState pState;
         List<Action> updaters;
+        Managers.CollisionManager col;
 
         public Button goodFPS;
         public Button badFPS;
 
         public quad background;
+        public quad playerCharacter;
+        public quad box;
 
         public GameState()
         {
             pState = GameStateManager.man.pState;
             updaters = new List<Action>();
+            col = new Managers.CollisionManager();
 
             background = new quad("Content/grass.png");
             background.pos.xScale = 1f / 2f;
@@ -34,6 +38,17 @@ namespace nullEngine.StateMachines
             badFPS = new Button("FPS - Bad", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left);
             updaters.Add(badFPS.update);
 
+            playerCharacter = new quad("Content/roguelikeCharBeard_transparent.png");
+            playerCharacter.AddComponent(new KeyboardControl(5));
+            playerCharacter.AddComponent(new cDeactivateOnCollide(playerCharacter));
+            playerCharacter.pos.xPos = Game.window.Width / 2;
+            playerCharacter.pos.yPos = Game.window.Height / 2;
+            updaters.Add(playerCharacter.update);
+
+            box = new quad("Content/roguelikeCharBeard_transparent.png");
+            box.AddComponent(new cCollider(box));
+            updaters.Add(box.update);
+
         }
 
         public void enter()
@@ -44,6 +59,8 @@ namespace nullEngine.StateMachines
         public void update()
         {
             checkStates();
+            col.update();
+
             if(Game.input.KeyFallingEdge(OpenTK.Input.Key.Escape))
             {
                 toPauseState();
