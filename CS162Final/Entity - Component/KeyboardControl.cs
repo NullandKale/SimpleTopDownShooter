@@ -11,30 +11,72 @@ namespace nullEngine.Entity___Component
     class KeyboardControl : iComponent
     {
         private int speed;
+        private bool xPositiveMove;
+        private bool xNegativeMove;
+        private bool yPositiveMove;
+        private bool yNegativeMove;
+
 
         public KeyboardControl(int speed)
         {
             this.speed = speed;
+
+            xPositiveMove = true;
+            xNegativeMove = true;
+
+            yPositiveMove = true;
+            yNegativeMove = true;
+        }
+
+        public void CollidingOn(int x, int y)
+        {
+            if(x > 0)
+            {
+                xPositiveMove = false;
+            }
+            if(x < 0)
+            {
+                xNegativeMove = false;
+            }
+            if(x == 0)
+            {
+                xPositiveMove = true;
+                xNegativeMove = true;
+            }
+
+            if(y > 0)
+            {
+                yPositiveMove = false;
+            }
+            if(y < 0)
+            {
+                yNegativeMove = false;
+            }
+            if(y == 0)
+            {
+                yPositiveMove = true;
+                yNegativeMove = true;
+            }
         }
 
         public void Run(renderable r)
         {
-            if(Game.input.KeyHeld(Key.W))
+            if(Game.input.KeyHeld(Key.W) && yNegativeMove)
             {
                 r.pos.yPos -= speed;
             }
 
-            if (Game.input.KeyHeld(Key.S))
+            if (Game.input.KeyHeld(Key.S) && yPositiveMove)
             {
                 r.pos.yPos += speed;
             }
 
-            if (Game.input.KeyHeld(Key.A))
+            if (Game.input.KeyHeld(Key.A) && xNegativeMove)
             {
                 r.pos.xPos -= speed;
             }
 
-            if (Game.input.KeyHeld(Key.D))
+            if (Game.input.KeyHeld(Key.D) && xPositiveMove)
             {
                 r.pos.xPos += speed;
             }

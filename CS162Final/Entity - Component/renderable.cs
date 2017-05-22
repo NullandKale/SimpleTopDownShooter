@@ -49,6 +49,11 @@ namespace nullEngine.Entity___Component
 
         public T GetComponent<T> ()
         {
+            int temp = FindComponent<T>();
+            if (temp == -1)
+            {
+                throw new Exception("Cannot Find Component");
+            }
             return (T)components[FindComponent<T>()];
         }
     }

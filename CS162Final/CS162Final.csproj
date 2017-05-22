@@ -7,7 +7,7 @@
     <ProjectGuid>{AD053DEF-558C-4DDC-BDF8-E90A84FA3DE6}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CS162Final</RootNamespace>
+    <RootNamespace>nullEngine</RootNamespace>
     <AssemblyName>CS162Final</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Entity - Component\Button.cs" />
     <Compile Include="Entity - Component\cCollider.cs" />
+    <Compile Include="Entity - Component\cColliderMovementStop.cs" />
     <Compile Include="Entity - Component\cDeactivateOnCollide.cs" />
     <Compile Include="Entity - Component\iComponent.cs" />
     <Compile Include="Entity - Component\iRenderable.cs" />

@@ -19,7 +19,7 @@ namespace nullEngine.StateMachines
 
         public quad background;
         public quad playerCharacter;
-        public quad box;
+        public quad badGuy;
 
         public GameState()
         {
@@ -39,15 +39,18 @@ namespace nullEngine.StateMachines
             updaters.Add(badFPS.update);
 
             playerCharacter = new quad("Content/roguelikeCharBeard_transparent.png");
-            playerCharacter.AddComponent(new KeyboardControl(5));
-            playerCharacter.AddComponent(new cDeactivateOnCollide(playerCharacter));
+            KeyboardControl playerCharacterController = new KeyboardControl(5);
+            playerCharacter.AddComponent(playerCharacterController);
+            playerCharacter.AddComponent(new cColliderMovementStop(playerCharacter, playerCharacterController));
             playerCharacter.pos.xPos = Game.window.Width / 2;
             playerCharacter.pos.yPos = Game.window.Height / 2;
             updaters.Add(playerCharacter.update);
 
-            box = new quad("Content/roguelikeCharBeard_transparent.png");
-            box.AddComponent(new cCollider(box));
-            updaters.Add(box.update);
+            badGuy = new quad("Content/roguelikeCharBeard_transparent.png");
+            badGuy.AddComponent(new cCollider(badGuy));
+            badGuy.pos.xPos = 100;
+            badGuy.pos.yPos = 100;
+            updaters.Add(badGuy.update);
 
         }
 

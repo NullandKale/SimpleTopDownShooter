@@ -13,6 +13,7 @@ namespace nullEngine.Entity___Component
         public renderable rRef;
         public Rectangle rect;
 
+
         public cCollider(renderable r)
         {
             Managers.CollisionManager.man.colliders.Add(this);
@@ -20,7 +21,7 @@ namespace nullEngine.Entity___Component
             rect = new Rectangle((int)rRef.pos.xPos, (int)rRef.pos.yPos, rRef.getWidth(), rRef.getHeight());
         }
 
-        public void Run(renderable r)
+        public virtual void Run(renderable r)
         {
             rect.X = (int)r.pos.xPos;
             rect.Y = (int)r.pos.yPos;
