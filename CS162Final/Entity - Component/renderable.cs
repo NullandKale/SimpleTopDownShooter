@@ -9,7 +9,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System.Drawing;
 
-namespace nullEngine
+namespace nullEngine.Entity___Component
 {
     public abstract class renderable
     {
@@ -20,6 +20,8 @@ namespace nullEngine
         public Color col;
         public bool active = true;
 
+        public abstract int getWidth();
+        public abstract int getHeight();
         public abstract void update();
         public abstract void render();
 
@@ -30,6 +32,24 @@ namespace nullEngine
             {
                 components.Add(c);
             }
+        }
+
+        public int FindComponent<T> ()
+        {
+            for(int i = 0; i < components.Count; i++)
+            {
+                Type compType = components[i].GetType();
+                if (compType is T)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public T GetComponent<T> ()
+        {
+            return (T)components[FindComponent<T>()];
         }
     }
 

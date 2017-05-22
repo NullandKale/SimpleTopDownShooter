@@ -9,7 +9,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System.Drawing;
 
-namespace nullEngine
+namespace nullEngine.Entity___Component
 {
     public class quad : renderable
     {
@@ -96,6 +96,16 @@ namespace nullEngine
             GL.Vertex2(width, height);
 
             GL.End();
+        }
+
+        public override int getWidth()
+        {
+            return tex.width * transform.masterScale;
+        }
+
+        public override int getHeight()
+        {
+            return tex.height * transform.masterScale;
         }
     }
 }

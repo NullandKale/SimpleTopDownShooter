@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity - Component\Button.cs" />
+    <Compile Include="Entity - Component\cCollider.cs" />
     <Compile Include="Entity - Component\iComponent.cs" />
     <Compile Include="Entity - Component\iRenderable.cs" />
     <Compile Include="Entity - Component\KeyboardControl.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Entity - Component\text.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Managers\ButtonManager.cs" />
+    <Compile Include="Managers\CollisionManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\TextureManager.cs" />
     <Compile Include="Program.cs" />

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
-namespace nullEngine
+namespace nullEngine.Entity___Component
 {
     public class text : renderable
     {
@@ -86,6 +86,16 @@ namespace nullEngine
             GL.Vertex2(tex.width, tex.height);
 
             GL.End();
+        }
+
+        public override int getWidth()
+        {
+            return tex.width * transform.masterScale;
+        }
+
+        public override int getHeight()
+        {
+            return tex.height * transform.masterScale;
         }
 
         public static letter[] stringToLetter(string s)

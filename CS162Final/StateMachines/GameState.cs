@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using nullEngine.Entity___Component;
+
 namespace nullEngine.StateMachines
 {
     class GameState : iState

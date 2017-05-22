@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using OpenTK.Input;
 
-namespace nullEngine
+namespace nullEngine.Entity___Component
 {
     class KeyboardControl : iComponent
     {
