@@ -10,11 +10,11 @@ namespace nullEngine.Entity___Component
 {
     class KeyboardControl : iComponent
     {
-        private int speed;
-        private bool xPositiveMove;
-        private bool xNegativeMove;
-        private bool yPositiveMove;
-        private bool yNegativeMove;
+        protected int speed;
+        protected bool xPositiveMove;
+        protected bool xNegativeMove;
+        protected bool yPositiveMove;
+        protected bool yNegativeMove;
 
 
         public KeyboardControl(int speed)
@@ -59,7 +59,7 @@ namespace nullEngine.Entity___Component
             }
         }
 
-        public void Run(renderable r)
+        public virtual void Run(renderable r)
         {
             if(Game.input.KeyHeld(Key.W) && yNegativeMove)
             {

@@ -56,6 +56,18 @@ namespace nullEngine.Entity___Component
             }
             return (T)components[FindComponent<T>()];
         }
+
+        public void setPos(int x, int y)
+        {
+            pos.xPos = x;
+            pos.yPos = y;
+        }
+
+        public void setRelativePos(float x, float y)
+        {
+            pos.xPos += x;
+            pos.yPos += y;
+        }
     }
 
     public class transform

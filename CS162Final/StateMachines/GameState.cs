@@ -19,6 +19,7 @@ namespace nullEngine.StateMachines
 
         public quad background;
         public quad playerCharacter;
+        public quad f;
         public quad badGuy;
 
         public GameState()
@@ -39,12 +40,17 @@ namespace nullEngine.StateMachines
             updaters.Add(badFPS.update);
 
             playerCharacter = new quad("Content/roguelikeCharBeard_transparent.png");
-            KeyboardControl playerCharacterController = new KeyboardControl(5);
-            playerCharacter.AddComponent(playerCharacterController);
-            playerCharacter.AddComponent(new cColliderMovementStop(playerCharacter, playerCharacterController));
+            cCollider playerCollider = new cCollider(playerCharacter);
+            playerCharacter.AddComponent(playerCollider);
+            playerCharacter.AddComponent(new cKeyboardMoveandCollide(5, playerCollider));
             playerCharacter.pos.xPos = Game.window.Width / 2;
             playerCharacter.pos.yPos = Game.window.Height / 2;
             updaters.Add(playerCharacter.update);
+
+            f = new quad(Game.font.getTile((int)letter.F));
+            f.active = false;
+            f.AddComponent(new cMouseFire(f, 1, 0.1f, playerCharacter));
+            updaters.Add(f.update);
 
             badGuy = new quad("Content/roguelikeCharBeard_transparent.png");
             badGuy.AddComponent(new cCollider(badGuy));
@@ -67,6 +73,11 @@ namespace nullEngine.StateMachines
             if(Game.input.KeyFallingEdge(OpenTK.Input.Key.Escape))
             {
                 toPauseState();
+            }
+
+            if(Game.input.isClickedRising(OpenTK.Input.MouseButton.Left))
+            {
+                f.active = true;
             }
 
             for (int i = 0; i < updaters.Count; i++)

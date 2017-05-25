@@ -33,7 +33,7 @@ namespace nullEngine.Entity___Component
             {
                 xCol = 1;
             }
-            if(c.rect.X < rect.X)
+            else if(c.rect.X < rect.X)
             {
                 xCol = -1;
             }
@@ -42,7 +42,7 @@ namespace nullEngine.Entity___Component
             {
                 yCol = 1;
             }
-            if(c.rect.Y < rect.Y)
+            else if(c.rect.Y < rect.Y)
             {
                 yCol = -1;
             }

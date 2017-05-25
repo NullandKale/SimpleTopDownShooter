@@ -37,6 +37,16 @@ namespace nullEngine.Entity___Component
             return rect.IntersectsWith(c1.rect);
         }
 
+        public bool collides(Rectangle otherRect)
+        {
+            if(this.rect == otherRect)
+            {
+                return false;
+            }
+
+            return rect.IntersectsWith(otherRect);
+        }
+
         public virtual void callback(cCollider c)
         {
 

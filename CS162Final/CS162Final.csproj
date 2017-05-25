@@ -56,6 +56,8 @@
     <Compile Include="Entity - Component\cCollider.cs" />
     <Compile Include="Entity - Component\cColliderMovementStop.cs" />
     <Compile Include="Entity - Component\cDeactivateOnCollide.cs" />
+    <Compile Include="Entity - Component\cKeyboardMoveandCollide.cs" />
+    <Compile Include="Entity - Component\cMouseFire.cs" />
     <Compile Include="Entity - Component\iComponent.cs" />
     <Compile Include="Entity - Component\iRenderable.cs" />
     <Compile Include="Entity - Component\KeyboardControl.cs" />
