@@ -11,7 +11,7 @@ namespace nullEngine.Entity___Component
 
         public cDeactivateOnCollide(renderable r) : base (r)
         {
-
+            base.Run(r);
         }
 
         public override void callback(cCollider c)

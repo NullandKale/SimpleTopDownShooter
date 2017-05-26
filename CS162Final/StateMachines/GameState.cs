@@ -20,13 +20,13 @@ namespace nullEngine.StateMachines
         public quad background;
         public quad playerCharacter;
         public quad f;
-        public quad badGuy;
+        public quad[,] badGuy;
 
         public GameState()
         {
             pState = GameStateManager.man.pState;
             updaters = new List<Action>();
-            col = new Managers.CollisionManager();
+            col = new Managers.CollisionManager(512);
 
             background = new quad("Content/grass.png");
             background.pos.xScale = 1f / 2f;
@@ -43,8 +43,10 @@ namespace nullEngine.StateMachines
             cCollider playerCollider = new cCollider(playerCharacter);
             playerCharacter.AddComponent(playerCollider);
             playerCharacter.AddComponent(new cKeyboardMoveandCollide(5, playerCollider));
-            playerCharacter.pos.xPos = Game.window.Width / 2;
-            playerCharacter.pos.yPos = Game.window.Height / 2;
+            playerCharacter.AddComponent(new cFollowCamera(10, false));
+            playerCharacter.pos.xPos = Game.window.Width / 2 + 10;
+            playerCharacter.pos.yPos = Game.window.Height / 2 + 10;
+            playerCharacter.AddComponent(new cDEBUG_POS());
             updaters.Add(playerCharacter.update);
 
             f = new quad(Game.font.getTile((int)letter.F));
@@ -52,11 +54,18 @@ namespace nullEngine.StateMachines
             f.AddComponent(new cMouseFire(f, 1, 0.1f, playerCharacter));
             updaters.Add(f.update);
 
-            badGuy = new quad("Content/roguelikeCharBeard_transparent.png");
-            badGuy.AddComponent(new cCollider(badGuy));
-            badGuy.pos.xPos = 100;
-            badGuy.pos.yPos = 100;
-            updaters.Add(badGuy.update);
+            badGuy = new quad[20, 20];
+            for (int i = 0; i < badGuy.GetLength(0); i++)
+            {
+                for (int j = 0; j < badGuy.GetLength(1); j++)
+                {
+                    badGuy[i, j] = new quad("Content/roguelikeCharBeard_transparent.png");
+                    badGuy[i, j].AddComponent(new cCollider(badGuy[i, j]));
+                    badGuy[i, j].pos.xPos = 200 * i;
+                    badGuy[i, j].pos.yPos = 200 * j;
+                    updaters.Add(badGuy[i, j].update);
+                }
+            }
 
         }
 

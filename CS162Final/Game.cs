@@ -26,8 +26,24 @@ namespace nullEngine
 
         private Matrix4 projMatrix;
 
-        static int worldx = 0;
-        static int worldy = 0;
+        public static int worldx = 0;
+        public static int worldy = 0;
+
+        public static int worldCenterX
+        {
+            get
+            {
+                return worldx + window.Width / 2;
+            }
+        }
+
+        public static int worldCenterY
+        {
+            get
+            {
+                return worldy + window.Height / 2;
+            }
+        }
 
         private Stopwatch sw;
 
@@ -104,6 +120,12 @@ namespace nullEngine
         public static Point ScreenToWorldSpace(Point p)
         {
             return new Point(p.X + worldx, p.Y + worldy);
+        }
+
+        public static void SetWindowCenter(int x, int y)
+        {
+            worldx = x - (window.Width / 2);
+            worldy = y - (window.Height / 2);
         }
 
         void PrintHello()

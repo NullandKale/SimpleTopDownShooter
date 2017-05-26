@@ -8,13 +8,13 @@ namespace nullEngine.Entity___Component
 {
     class cColliderMovementStop : cCollider
     {
-        private KeyboardControl key;
+        private KeyboardControl keyboard;
         int xCol;
         int yCol;
 
         public cColliderMovementStop(renderable r, KeyboardControl k) : base(r)
         {
-            key = k;
+            keyboard = k;
             xCol = 0;
             yCol = 0;
         }
@@ -22,7 +22,7 @@ namespace nullEngine.Entity___Component
         public override void Run(renderable r)
         {
             base.Run(r);
-            key.CollidingOn(xCol, yCol);
+            keyboard.CollidingOn(xCol, yCol);
             xCol = 0;
             yCol = 0;
         }

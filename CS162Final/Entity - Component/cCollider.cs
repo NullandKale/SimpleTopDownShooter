@@ -12,19 +12,24 @@ namespace nullEngine.Entity___Component
     {
         public renderable rRef;
         public Rectangle rect;
+        public Point key;
 
 
         public cCollider(renderable r)
         {
-            Managers.CollisionManager.man.colliders.Add(this);
+            Managers.CollisionManager.addCollider(this);
             rRef = r;
             rect = new Rectangle((int)rRef.pos.xPos, (int)rRef.pos.yPos, rRef.getWidth(), rRef.getHeight());
         }
 
         public virtual void Run(renderable r)
         {
-            rect.X = (int)r.pos.xPos;
-            rect.Y = (int)r.pos.yPos;
+            if((int)r.pos.xPos != rect.X || (int)r.pos.yPos != rect.Y)
+            {
+                rect.X = (int)r.pos.xPos;
+                rect.Y = (int)r.pos.yPos;
+                Managers.CollisionManager.moveCollider(this);
+            }
         }
 
         public bool collides(cCollider c1)

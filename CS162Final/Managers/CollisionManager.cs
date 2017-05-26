@@ -12,10 +12,13 @@ namespace nullEngine.Managers
     {
         public static CollisionManager man;
         public List<Entity___Component.cCollider> colliders;
+        public Dictionary<Point, List<Entity___Component.cCollider>> boundingBoxes;
 
         bool waitingPeriodOver;
 
-        public CollisionManager()
+        int boundSize;
+
+        public CollisionManager(int minBoundSize)
         {
             if(man == null)
             {
@@ -25,13 +28,51 @@ namespace nullEngine.Managers
             {
                 Console.WriteLine("Singleton Failure @ CollisionManager");
             }
+            boundSize = minBoundSize;
             colliders = new List<Entity___Component.cCollider>();
+            boundingBoxes = new Dictionary<Point, List<Entity___Component.cCollider>>();
             waitingPeriodOver = false;
         }
 
         public void update()
         {
-            if(waitingPeriodOver)
+            callCallbacks();
+        }
+
+        public static void addCollider(Entity___Component.cCollider c)
+        {
+            Point key = getKey(c.rect);
+            if(man.boundingBoxes.ContainsKey(key))
+            {
+                man.boundingBoxes[key].Add(c);
+            }
+            else
+            {
+                man.boundingBoxes.Add(key, new List<Entity___Component.cCollider>());
+                man.boundingBoxes[key].Add(c);
+            }
+            c.key = key;
+        }
+
+        public static void removeCollider(Entity___Component.cCollider c)
+        {
+            man.boundingBoxes[c.key].Remove(c);
+        }
+
+        public static void moveCollider(Entity___Component.cCollider c)
+        {
+            removeCollider(c);
+            addCollider(c);
+        }
+
+        public static Point getKey(Rectangle rect)
+        {
+            return new Point(rect.X / man.boundSize, rect.Y / man.boundSize);
+        }
+
+        public void callCallbacks()
+        {
+            if (waitingPeriodOver)
             {
                 for (int i = 0; i < colliders.Count; i++)
                 {
@@ -44,7 +85,7 @@ namespace nullEngine.Managers
             }
             else
             {
-                if(Game.tick == 19)
+                if (Game.tick == 19)
                 {
                     waitingPeriodOver = true;
                 }
@@ -77,9 +118,11 @@ namespace nullEngine.Managers
         public List<int> CheckCollision(Entity___Component.cCollider c)
         {
             List<int> temp = new List<int>();
-            for(int i = 0; i < colliders.Count; i++)
+            Point key = getKey(c.rect);
+
+            for (int i = 0; i < boundingBoxes[key].Count; i++)
             {
-                if (c.collides(colliders[i]) && c != colliders[i])
+                if (c.collides(boundingBoxes[key][i]) && c != boundingBoxes[key][i])
                 {
                     temp.Add(i);
                 }
@@ -89,11 +132,23 @@ namespace nullEngine.Managers
 
         public Boolean CheckFutureCollision(Rectangle rect, Entity___Component.cCollider c)
         {
-            for (int i = 0; i < colliders.Count; i++)
+            Point cKey = getKey(rect);
+
+            for(int i = -1; i <= 1; i++)
             {
-                if (colliders[i].collides(rect) && c != colliders[i])
+                for(int j = -1; j <= 1; j++)
                 {
-                    return true;
+                    Point key = new Point(cKey.X + i, cKey.Y + j);
+                    if (boundingBoxes.ContainsKey(key))
+                    {
+                        for (int k = 0; k < boundingBoxes[key].Count; k++)
+                        {
+                            if (boundingBoxes[key][k].collides(rect) && c != boundingBoxes[key][k])
+                            {
+                                return true;
+                            }
+                        }
+                    }
                 }
             }
             return false;
