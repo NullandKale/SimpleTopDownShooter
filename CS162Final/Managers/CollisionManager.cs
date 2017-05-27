@@ -11,7 +11,7 @@ namespace nullEngine.Managers
     class CollisionManager
     {
         public static CollisionManager man;
-        public List<Entity___Component.cCollider> colliders;
+        public List<Entity___Component.cCollider> toCallBack;
         public Dictionary<Point, List<Entity___Component.cCollider>> boundingBoxes;
 
         bool waitingPeriodOver;
@@ -29,7 +29,7 @@ namespace nullEngine.Managers
                 Console.WriteLine("Singleton Failure @ CollisionManager");
             }
             boundSize = minBoundSize;
-            colliders = new List<Entity___Component.cCollider>();
+            toCallBack = new List<Entity___Component.cCollider>();
             boundingBoxes = new Dictionary<Point, List<Entity___Component.cCollider>>();
             waitingPeriodOver = false;
         }
@@ -74,12 +74,12 @@ namespace nullEngine.Managers
         {
             if (waitingPeriodOver)
             {
-                for (int i = 0; i < colliders.Count; i++)
+                for (int i = 0; i < toCallBack.Count; i++)
                 {
-                    List<int> temp = CheckCollision(colliders[i]);
+                    List<int> temp = CheckCollision(toCallBack[i]);
                     for (int j = 0; j < temp.Count; j++)
                     {
-                        colliders[i].callback(colliders[temp[j]]);
+                        toCallBack[i].callback(toCallBack[temp[j]]);
                     }
                 }
             }

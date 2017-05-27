@@ -26,8 +26,10 @@ namespace nullEngine
 
         private Matrix4 projMatrix;
 
-        public static int worldx = 0;
-        public static int worldy = 0;
+        static int worldx = 0;
+        static int worldy = 0;
+
+        public static Rectangle worldRect;
 
         public static int worldCenterX
         {
@@ -50,6 +52,7 @@ namespace nullEngine
         public Game(GameWindow w)
         {
             window = w;
+            worldRect = new Rectangle(worldx, worldy, window.Width, window.Height);
 
             window.Load += window_Load;
             window.UpdateFrame += window_UpdateFrame;
@@ -126,6 +129,7 @@ namespace nullEngine
         {
             worldx = x - (window.Width / 2);
             worldy = y - (window.Height / 2);
+            worldRect = new Rectangle(worldx, worldy, window.Width, window.Height);
         }
 
         void PrintHello()

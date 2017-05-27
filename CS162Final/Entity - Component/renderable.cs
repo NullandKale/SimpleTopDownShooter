@@ -25,6 +25,23 @@ namespace nullEngine.Entity___Component
         public abstract void update();
         public abstract void render();
 
+        public Rectangle getRect()
+        {
+            return new Rectangle((int)pos.xPos, (int)pos.yPos, getWidth(), getHeight());
+        }
+
+        public void DistCulling()
+        {
+            if (Game.worldRect.IntersectsWith(getRect()))
+            {
+                active = true;
+            }
+            else
+            {
+                active = false;
+            }
+        }
+
         public void AddComponent(iComponent c)
         {
             //prevent adding multiple of the same component

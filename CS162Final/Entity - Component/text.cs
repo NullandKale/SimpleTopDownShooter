@@ -52,6 +52,8 @@ namespace nullEngine.Entity___Component
             {
                 Game.renderQueue.Enqueue(render);
             }
+
+            base.DistCulling();
         }
 
         public override void render()

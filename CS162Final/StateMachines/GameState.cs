@@ -54,7 +54,7 @@ namespace nullEngine.StateMachines
             f.AddComponent(new cMouseFire(f, 1, 0.1f, playerCharacter));
             updaters.Add(f.update);
 
-            badGuy = new quad[20, 20];
+            badGuy = new quad[10, 10];
             for (int i = 0; i < badGuy.GetLength(0); i++)
             {
                 for (int j = 0; j < badGuy.GetLength(1); j++)
