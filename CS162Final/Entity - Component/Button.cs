@@ -17,10 +17,11 @@ namespace nullEngine
         public quad background;
         public MouseButton button;
         public Action onClick;
+        public StateMachines.iState containingState;
 
         private String echo;
 
-        public Button(string text, Texture2D background, Action onClick, MouseButton buttonToCheck)
+        public Button(string text, Texture2D background, Action onClick, MouseButton buttonToCheck, StateMachines.iState state)
         {
             this.background = new quad(background);
             t = new text(text);
@@ -29,10 +30,11 @@ namespace nullEngine
             this.onClick = onClick;
             button = buttonToCheck;
             Game.buttonMan.Add(this);
+            containingState = state;
         }
 
         //DEBUG CONSTRUCTOR
-        public Button(string text, Texture2D background, String toEcho, MouseButton buttonToCheck)
+        public Button(string text, Texture2D background, String toEcho, MouseButton buttonToCheck, StateMachines.iState state)
         {
             this.background = new quad(background);
             t = new text(text);
@@ -42,6 +44,7 @@ namespace nullEngine
             onClick = Echo;
             button = buttonToCheck;
             Game.buttonMan.Add(this);
+            containingState = state;
         }
 
         public void update()

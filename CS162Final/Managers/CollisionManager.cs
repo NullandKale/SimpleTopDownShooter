@@ -12,9 +12,6 @@ namespace nullEngine.Managers
     {
         public static CollisionManager man;
         public Dictionary<Point, List<Entity___Component.cCollider>> boundingBoxes;
-
-        bool waitingPeriodOver;
-
         int boundSize;
 
         public CollisionManager(int minBoundSize)
@@ -29,7 +26,6 @@ namespace nullEngine.Managers
             }
             boundSize = minBoundSize;
             boundingBoxes = new Dictionary<Point, List<Entity___Component.cCollider>>();
-            waitingPeriodOver = false;
         }
 
         public void update()
@@ -95,25 +91,35 @@ namespace nullEngine.Managers
         public List<int> CheckCollision(Entity___Component.cCollider c)
         {
             List<int> temp = new List<int>();
-            Point key = getKey(c.rect);
+            Point cKey = getKey(c.rect);
 
-            for (int i = 0; i < boundingBoxes[key].Count; i++)
+            for (int i = -1; i <= 1; i++)
             {
-                if (c.collides(boundingBoxes[key][i]) && c != boundingBoxes[key][i])
+                for (int j = -1; j <= 1; j++)
                 {
-                    temp.Add(i);
+                    Point key = new Point(cKey.X + i, cKey.Y + j);
+                    if (boundingBoxes.ContainsKey(key))
+                    {
+                        for (int k = 0; k < boundingBoxes[key].Count; k++)
+                        {
+                            if (c.collides(boundingBoxes[key][k]) && c != boundingBoxes[key][k])
+                            {
+                                temp.Add(k);
+                            }
+                        }
+                    }
                 }
             }
+
             return temp;
         }
 
         public Boolean CheckFutureCollision(Rectangle rect, Entity___Component.cCollider c)
         {
             Point cKey = getKey(rect);
-
-            for(int i = -1; i <= 1; i++)
+            for (int i = -1; i <= 1; i++)
             {
-                for(int j = -1; j <= 1; j++)
+                for (int j = -1; j <= 1; j++)
                 {
                     Point key = new Point(cKey.X + i, cKey.Y + j);
                     if (boundingBoxes.ContainsKey(key))

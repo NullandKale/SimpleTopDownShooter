@@ -29,7 +29,7 @@ namespace nullEngine
             {
                 for(int i = 0; i < Buttons.Count; i++)
                 {
-                    if(Buttons[i].t.active)
+                    if(Buttons[i].background.active && StateMachines.GameStateManager.man.CurrentState == Buttons[i].containingState)
                     {
                         if (Buttons[i].button == MouseButton.Right && doRight)
                         {

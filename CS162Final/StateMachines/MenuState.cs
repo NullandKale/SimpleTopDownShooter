@@ -28,19 +28,19 @@ namespace nullEngine.StateMachines
             gState = GameStateManager.man.gState;
             updaters = new List<Action>();
 
-            newGameButton = new Button(newGameText, Game.buttonBackground, toGameState, OpenTK.Input.MouseButton.Left);
+            newGameButton = new Button(newGameText, Game.buttonBackground, toGameState, OpenTK.Input.MouseButton.Left, this);
             newGameButton.SetCenterPos(new Point(Game.window.Width / 2, Game.window.Height / 2));
             updaters.Add(newGameButton.update);
 
-            loadGameButton = new Button(loadGameText, Game.buttonBackground, "Not Implemented", OpenTK.Input.MouseButton.Left);
+            loadGameButton = new Button(loadGameText, Game.buttonBackground, "Not Implemented", OpenTK.Input.MouseButton.Left, this);
             loadGameButton.SetCenterPos(new Point(Game.window.Width / 2, (Game.window.Height / 2) + 60));
             updaters.Add(loadGameButton.update);
 
-            settingsButton = new Button(settingsText, Game.buttonBackground, "Not Implemented Either", OpenTK.Input.MouseButton.Left);
+            settingsButton = new Button(settingsText, Game.buttonBackground, "Not Implemented Either", OpenTK.Input.MouseButton.Left, this);
             settingsButton.SetCenterPos(new Point(Game.window.Width / 2, (Game.window.Height / 2) + 120));
             updaters.Add(settingsButton.update);
 
-            exitButton = new Button(exitText, Game.buttonBackground, exit, OpenTK.Input.MouseButton.Left);
+            exitButton = new Button(exitText, Game.buttonBackground, exit, OpenTK.Input.MouseButton.Left, this);
             exitButton.SetCenterPos(new Point(Game.window.Width / 2, (Game.window.Height / 2) + 180));
             updaters.Add(exitButton.update);
         }

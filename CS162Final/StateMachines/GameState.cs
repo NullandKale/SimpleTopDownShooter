@@ -33,10 +33,10 @@ namespace nullEngine.StateMachines
             background.pos.yScale = 1f / 2f;
             updaters.Add(background.update);
 
-            goodFPS = new Button("FPS - Good", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left);
+            goodFPS = new Button("FPS - Good", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
             updaters.Add(goodFPS.update);
 
-            badFPS = new Button("FPS - Bad", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left);
+            badFPS = new Button("FPS - Bad", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
             updaters.Add(badFPS.update);
 
             playerCharacter = new quad("Content/roguelikeCharBeard_transparent.png");
@@ -52,7 +52,7 @@ namespace nullEngine.StateMachines
 
             f = new quad("Content/bullet.png");
             f.active = false;
-            f.AddComponent(new cMouseFire(f, 60, playerCharacter));
+            f.AddComponent(new cMouseFire(f, 20, playerCharacter));
             f.AddComponent(new cDeactivateOnCollide(f));
             updaters.Add(f.update);
 

@@ -39,29 +39,29 @@ namespace nullEngine.StateMachines
             mState = GameStateManager.man.mState;
             updaters = new List<Action>();
 
-            returnToGameButton = new Button(returnText, Game.buttonBackground, toGameState, OpenTK.Input.MouseButton.Left);
+            returnToGameButton = new Button(returnText, Game.buttonBackground, toGameState, OpenTK.Input.MouseButton.Left, this);
             returnToGameButton.SetCenterPos(new Point(Game.window.Width / 2, Game.window.Height / 2));
             updaters.Add(returnToGameButton.update);
 
-            optionsButton = new Button(optionsText, Game.buttonBackground, "Not Implemented", OpenTK.Input.MouseButton.Left);
+            optionsButton = new Button(optionsText, Game.buttonBackground, "Not Implemented", OpenTK.Input.MouseButton.Left, this);
             optionsButton.SetCenterPos(new Point(Game.window.Width / 2, Game.window.Height / 2 + 60));
             updaters.Add(optionsButton.update);
 
-            exitToMenu = new Button(exitText, Game.buttonBackground, confirmation, OpenTK.Input.MouseButton.Left);
+            exitToMenu = new Button(exitText, Game.buttonBackground, confirmation, OpenTK.Input.MouseButton.Left, this);
             exitToMenu.SetCenterPos(new Point(Game.window.Width / 2, Game.window.Height / 2 + 120));
             updaters.Add(exitToMenu.update);
 
-            areYouSure = new Button(areYouSureText, Game.buttonBackground, "", OpenTK.Input.MouseButton.Left);
+            areYouSure = new Button(areYouSureText, Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
             areYouSure.SetCenterPos(new Point(Game.window.Width / 2, Game.window.Height / 2));
             areYouSure.SetActive(false);
             updaters.Add(areYouSure.update);
 
-            yes = new Button(yesText, Game.buttonBackground, toMenuState, OpenTK.Input.MouseButton.Left);
+            yes = new Button(yesText, Game.buttonBackground, toMenuState, OpenTK.Input.MouseButton.Left, this);
             yes.SetCenterPos(new Point(Game.window.Width / 2 - 60, Game.window.Height / 2 + 60));
             yes.SetActive(false);
             updaters.Add(yes.update);
 
-            no = new Button(noText, Game.buttonBackground, confirmation, OpenTK.Input.MouseButton.Left);
+            no = new Button(noText, Game.buttonBackground, confirmation, OpenTK.Input.MouseButton.Left, this);
             no.SetCenterPos(new Point(Game.window.Width / 2 + 60, Game.window.Height / 2 + 60));
             no.SetActive(false);
             updaters.Add(no.update);
