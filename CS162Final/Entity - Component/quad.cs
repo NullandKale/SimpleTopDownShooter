@@ -51,19 +51,19 @@ namespace nullEngine.Entity___Component
 
         public override void update()
         {
+            base.DistCulling();
+
             //Loop through all componants and run them.
-            for(int i = 0; i < components.Count; i++)
+            for (int i = 0; i < components.Count; i++)
             {
                 components[i].Run(this);
             }
 
             //At end of update add renderer to render Queue.
-            if(active)
+            if (active && culled)
             {
                 Game.renderQueue.Enqueue(render);
             }
-
-            base.DistCulling();
         }
 
         public override void render()

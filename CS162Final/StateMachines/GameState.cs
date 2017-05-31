@@ -26,7 +26,7 @@ namespace nullEngine.StateMachines
         {
             pState = GameStateManager.man.pState;
             updaters = new List<Action>();
-            col = new Managers.CollisionManager(512);
+            col = new Managers.CollisionManager(128);
 
             background = new quad("Content/grass.png");
             background.pos.xScale = 1f / 2f;
@@ -47,11 +47,13 @@ namespace nullEngine.StateMachines
             playerCharacter.pos.xPos = Game.window.Width / 2 + 10;
             playerCharacter.pos.yPos = Game.window.Height / 2 + 10;
             playerCharacter.AddComponent(new cDEBUG_POS());
+            playerCharacter.tag = "Player";
             updaters.Add(playerCharacter.update);
 
-            f = new quad(Game.font.getTile((int)letter.F));
+            f = new quad("Content/bullet.png");
             f.active = false;
-            f.AddComponent(new cMouseFire(f, 1, 0.1f, playerCharacter));
+            f.AddComponent(new cMouseFire(f, 60, playerCharacter));
+            f.AddComponent(new cDeactivateOnCollide(f));
             updaters.Add(f.update);
 
             badGuy = new quad[10, 10];

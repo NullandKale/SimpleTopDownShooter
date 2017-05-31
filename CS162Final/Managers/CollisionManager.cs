@@ -11,7 +11,6 @@ namespace nullEngine.Managers
     class CollisionManager
     {
         public static CollisionManager man;
-        public List<Entity___Component.cCollider> toCallBack;
         public Dictionary<Point, List<Entity___Component.cCollider>> boundingBoxes;
 
         bool waitingPeriodOver;
@@ -29,14 +28,13 @@ namespace nullEngine.Managers
                 Console.WriteLine("Singleton Failure @ CollisionManager");
             }
             boundSize = minBoundSize;
-            toCallBack = new List<Entity___Component.cCollider>();
             boundingBoxes = new Dictionary<Point, List<Entity___Component.cCollider>>();
             waitingPeriodOver = false;
         }
 
         public void update()
         {
-            callCallbacks();
+
         }
 
         public static void addCollider(Entity___Component.cCollider c)
@@ -70,27 +68,6 @@ namespace nullEngine.Managers
             return new Point(rect.X / man.boundSize, rect.Y / man.boundSize);
         }
 
-        public void callCallbacks()
-        {
-            if (waitingPeriodOver)
-            {
-                for (int i = 0; i < toCallBack.Count; i++)
-                {
-                    List<int> temp = CheckCollision(toCallBack[i]);
-                    for (int j = 0; j < temp.Count; j++)
-                    {
-                        toCallBack[i].callback(toCallBack[temp[j]]);
-                    }
-                }
-            }
-            else
-            {
-                if (Game.tick == 19)
-                {
-                    waitingPeriodOver = true;
-                }
-            }
-        }
 
         public static Point WillItCollide(Entity___Component.cCollider c, int xMove, int yMove)
         {
@@ -143,7 +120,7 @@ namespace nullEngine.Managers
                     {
                         for (int k = 0; k < boundingBoxes[key].Count; k++)
                         {
-                            if (boundingBoxes[key][k].collides(rect) && c != boundingBoxes[key][k])
+                            if (boundingBoxes[key][k].collides(rect, c) && c != boundingBoxes[key][k])
                             {
                                 return true;
                             }

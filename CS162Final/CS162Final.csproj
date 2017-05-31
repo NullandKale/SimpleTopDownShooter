@@ -90,7 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bullet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\buttonBackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

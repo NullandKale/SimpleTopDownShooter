@@ -19,6 +19,8 @@ namespace nullEngine.Entity___Component
         public Texture2D tex;
         public Color col;
         public bool active = true;
+        public bool culled = false;
+        public string tag;
 
         public abstract int getWidth();
         public abstract int getHeight();
@@ -34,11 +36,11 @@ namespace nullEngine.Entity___Component
         {
             if (Game.worldRect.IntersectsWith(getRect()))
             {
-                active = true;
+                culled = true;
             }
             else
             {
-                active = false;
+                culled = false;
             }
         }
 

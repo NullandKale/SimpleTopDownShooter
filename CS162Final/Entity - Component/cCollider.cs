@@ -34,7 +34,7 @@ namespace nullEngine.Entity___Component
 
         public bool collides(cCollider c1)
         {
-            if(this.rRef == null || c1.rRef == null || c1 == this)
+            if(this.rRef == null || c1.rRef == null || c1 == this || !c1.rRef.active || !rRef.active)
             {
                 return false;
             }
@@ -42,9 +42,9 @@ namespace nullEngine.Entity___Component
             return rect.IntersectsWith(c1.rect);
         }
 
-        public bool collides(Rectangle otherRect)
+        public bool collides(Rectangle otherRect, cCollider c1)
         {
-            if(this.rect == otherRect)
+            if(this.rect == otherRect || !rRef.active || !c1.rRef.active)
             {
                 return false;
             }

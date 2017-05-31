@@ -48,7 +48,7 @@ namespace nullEngine.Entity___Component
 
         public override void update()
         {
-            if(active)
+            if(active && culled)
             {
                 Game.renderQueue.Enqueue(render);
             }
