@@ -57,6 +57,7 @@
     <Compile Include="Entity - Component\cColliderMovementStop.cs" />
     <Compile Include="Entity - Component\cDeactivateOnCollide.cs" />
     <Compile Include="Entity - Component\cDEBUG_POS.cs" />
+    <Compile Include="Entity - Component\cEnemy.cs" />
     <Compile Include="Entity - Component\cFollowCamera.cs" />
     <Compile Include="Entity - Component\cKeyboardMoveandCollide.cs" />
     <Compile Include="Entity - Component\cMouseFire.cs" />
@@ -70,7 +71,9 @@
     <Compile Include="Game.cs" />
     <Compile Include="Managers\ButtonManager.cs" />
     <Compile Include="Managers\CollisionManager.cs" />
+    <Compile Include="Managers\EnemyManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
+    <Compile Include="Managers\SingletonException.cs" />
     <Compile Include="Managers\TextureManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="StateMachines\GameState.cs" />

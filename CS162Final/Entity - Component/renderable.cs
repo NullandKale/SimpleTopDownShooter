@@ -34,7 +34,7 @@ namespace nullEngine.Entity___Component
 
         public void DistCulling()
         {
-            if (Game.worldRect.IntersectsWith(getRect()))
+            if (Game.windowRect.IntersectsWith(getRect()))
             {
                 culled = true;
             }
@@ -80,6 +80,18 @@ namespace nullEngine.Entity___Component
         {
             pos.xPos = x;
             pos.yPos = y;
+        }
+
+        public void setPos(Point p)
+        {
+            pos.xPos = p.X;
+            pos.yPos = p.Y;
+        }
+
+        public void setRelativePos(Point p)
+        {
+            pos.xPos += p.X;
+            pos.yPos += p.Y;
         }
 
         public void setRelativePos(float x, float y)

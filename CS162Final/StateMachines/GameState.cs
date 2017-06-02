@@ -13,37 +13,32 @@ namespace nullEngine.StateMachines
         PauseState pState;
         List<Action> updaters;
         Managers.CollisionManager col;
-
-        public Button goodFPS;
-        public Button badFPS;
+        Managers.EnemyManager eMan;
 
         public quad background;
         public quad playerCharacter;
         public quad f;
-        public quad[,] badGuy;
+        public quad[] badGuy;
 
         public GameState()
         {
+            Game.worldMaxX = 2000;
+            Game.worldMaxY = 2000;
+
             pState = GameStateManager.man.pState;
             updaters = new List<Action>();
-            col = new Managers.CollisionManager(128);
+            col = new Managers.CollisionManager(100);
 
             background = new quad("Content/grass.png");
             background.pos.xScale = 1f / 2f;
             background.pos.yScale = 1f / 2f;
             updaters.Add(background.update);
 
-            goodFPS = new Button("FPS - Good", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
-            updaters.Add(goodFPS.update);
-
-            badFPS = new Button("FPS - Bad", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
-            updaters.Add(badFPS.update);
-
             playerCharacter = new quad("Content/roguelikeCharBeard_transparent.png");
+            playerCharacter.AddComponent(new cFollowCamera(playerCharacter));
             cCollider playerCollider = new cCollider(playerCharacter);
             playerCharacter.AddComponent(playerCollider);
             playerCharacter.AddComponent(new cKeyboardMoveandCollide(5, playerCollider));
-            playerCharacter.AddComponent(new cFollowCamera(10, false));
             playerCharacter.pos.xPos = Game.window.Width / 2 + 10;
             playerCharacter.pos.yPos = Game.window.Height / 2 + 10;
             playerCharacter.AddComponent(new cDEBUG_POS());
@@ -56,19 +51,18 @@ namespace nullEngine.StateMachines
             f.AddComponent(new cDeactivateOnCollide(f));
             updaters.Add(f.update);
 
-            badGuy = new quad[10, 10];
-            for (int i = 0; i < badGuy.GetLength(0); i++)
+            badGuy = new quad[100];
+            for (int j = 0; j < badGuy.Length; j++)
             {
-                for (int j = 0; j < badGuy.GetLength(1); j++)
-                {
-                    badGuy[i, j] = new quad("Content/roguelikeCharBeard_transparent.png");
-                    badGuy[i, j].AddComponent(new cCollider(badGuy[i, j]));
-                    badGuy[i, j].pos.xPos = 200 * i;
-                    badGuy[i, j].pos.yPos = 200 * j;
-                    updaters.Add(badGuy[i, j].update);
-                }
+                badGuy[j] = new quad("Content/roguelikeCharBeard_transparent.png");
+                cCollider badguyCollider = new cCollider(badGuy[j]);
+                badGuy[j].AddComponent(badguyCollider);
+                badGuy[j].AddComponent(new cEnemyAI(5, badguyCollider, playerCharacter, 100));
+                badGuy[j].active = false;
+                updaters.Add(badGuy[j].update);
             }
-
+            eMan = new Managers.EnemyManager(badGuy);
+            updaters.Add(eMan.update);
         }
 
         public void enter()
@@ -94,21 +88,6 @@ namespace nullEngine.StateMachines
             for (int i = 0; i < updaters.Count; i++)
             {
                 updaters[i].Invoke();
-            }
-
-            if(Game.frameTime <= 18)
-            {
-                goodFPS.SetActive(true);
-                badFPS.SetActive(false);
-            }
-            else
-            {
-                if(Game.tick == 15)
-                {
-                    Console.WriteLine(Game.frameTime);
-                }
-                goodFPS.SetActive(false);
-                badFPS.SetActive(true);
             }
         }
 

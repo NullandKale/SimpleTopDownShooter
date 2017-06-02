@@ -8,40 +8,45 @@ namespace nullEngine.Entity___Component
 {
     class cFollowCamera : iComponent
     {
-        int speed;
-        int currentPlace;
-        bool doLerp;
+        renderable followTarget;
 
-        public cFollowCamera(int speed, bool lerp)
+        public cFollowCamera(renderable target)
         {
-            this.speed = speed;
-            currentPlace = 0;
-            doLerp = lerp;
+            followTarget = target;
         }
 
 
         public void Run(renderable r)
         {
-            if(doLerp)
+            int halfWindowWidth = Game.windowRect.Width / 2;
+            int halfWindowHeight = Game.windowRect.Height / 2;
+
+            int moveX = 0;
+            int moveY = 0;
+
+            moveX = (int)followTarget.pos.xPos;
+            moveY = (int)followTarget.pos.yPos;
+
+            if (followTarget.pos.xPos <= halfWindowWidth)
             {
-                Game.SetWindowCenter(lerp(Game.worldCenterX, (int)r.pos.xPos), lerp(Game.worldCenterY, (int)r.pos.yPos));
+                moveX = halfWindowWidth;
             }
-            else
+            if (followTarget.pos.xPos >= Game.worldRect.Width - halfWindowWidth)
             {
-                Game.SetWindowCenter((int)r.pos.xPos, (int)r.pos.yPos);
+                moveX = Game.worldRect.Width - halfWindowWidth;
             }
+
+            if (followTarget.pos.yPos <= halfWindowHeight)
+            {
+                moveY = halfWindowHeight;
+            }
+            if (followTarget.pos.yPos >= Game.worldRect.Height - halfWindowHeight)
+            {
+                moveY = Game.worldRect.Height - halfWindowHeight;
+            }
+
+            Game.SetWindowCenter(moveX, moveY);
         }
 
-        int lerp(int v0, int v1)
-        {
-            if(currentPlace > speed)
-            {
-                currentPlace = 0;
-            }
-            float t = (float)currentPlace / (float)speed;
-            currentPlace++;
-
-            return (int)((1f - t) * (float)v0 + t * (float)v1);
-        }
     }
 }

@@ -22,7 +22,7 @@ namespace nullEngine.Managers
             }
             else
             {
-                Console.WriteLine("Singleton Failure @ CollisionManager");
+                throw new SingletonException(this);
             }
             boundSize = minBoundSize;
             boundingBoxes = new Dictionary<Point, List<Entity___Component.cCollider>>();
@@ -114,9 +114,39 @@ namespace nullEngine.Managers
             return temp;
         }
 
+        public Boolean CheckForLeaveWorld(Rectangle rect)
+        {
+            if(rect.X + rect.Width > Game.worldRect.Right)
+            {
+                return true;
+            }
+
+            if(rect.X < Game.worldRect.Left)
+            {
+                return true;
+            }
+
+            if(rect.Y + rect.Height > Game.worldRect.Bottom)
+            {
+                return true;
+            }
+
+            if(rect.Y < Game.worldRect.Top)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
         public Boolean CheckFutureCollision(Rectangle rect, Entity___Component.cCollider c)
         {
             Point cKey = getKey(rect);
+            if(CheckForLeaveWorld(rect))
+            {
+                return true;
+            }
             for (int i = -1; i <= 1; i++)
             {
                 for (int j = -1; j <= 1; j++)

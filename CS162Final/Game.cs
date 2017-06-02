@@ -17,10 +17,11 @@ namespace nullEngine
         public static int tick = 0;
         public static InputManager input;
         public static ButtonManager buttonMan;
-        public static Queue<Action> renderQueue = new Queue<Action>();
+        public static Queue<Action> renderQueue;
         public static TextureAtlas font;
         public static Texture2D buttonBackground;
         public static long frameTime;
+        public static Random rng;
 
         public StateMachines.GameStateManager gStateManager;
 
@@ -28,8 +29,11 @@ namespace nullEngine
 
         static int worldx = 0;
         static int worldy = 0;
+        public static int worldMaxX;
+        public static int worldMaxY;
 
         public static Rectangle worldRect;
+        public static Rectangle windowRect;
 
         public static int worldCenterX
         {
@@ -51,8 +55,13 @@ namespace nullEngine
 
         public Game(GameWindow w)
         {
+            rng = new Random();
             window = w;
-            worldRect = new Rectangle(worldx, worldy, window.Width, window.Height);
+            worldMaxX = int.MaxValue;
+            worldMaxY = int.MaxValue;
+
+            worldRect = new Rectangle(0, 0, worldMaxX, worldMaxY);
+            windowRect = new Rectangle(worldx, worldy, window.Width, window.Height);
 
             window.Load += window_Load;
             window.UpdateFrame += window_UpdateFrame;
@@ -71,6 +80,7 @@ namespace nullEngine
             //inititialize frame timer;
             sw = new Stopwatch();
             frameTime = 0;
+            renderQueue = new Queue<Action>();
         }
 
         void window_Load(object sender, EventArgs e)
@@ -87,7 +97,9 @@ namespace nullEngine
         void window_UpdateFrame(object sender, FrameEventArgs e)
         {
             projMatrix = Matrix4.CreateOrthographicOffCenter(worldx, window.Width + worldx, window.Height + worldy, worldy, 0, 1);
-            
+            windowRect.X = worldx;
+            windowRect.Y = worldy;
+            worldRect = new Rectangle(0, 0, worldMaxX, worldMaxY);
         }
 
         void window_RenderFrame(object sender, FrameEventArgs e)
@@ -129,7 +141,7 @@ namespace nullEngine
         {
             worldx = x - (window.Width / 2);
             worldy = y - (window.Height / 2);
-            worldRect = new Rectangle(worldx, worldy, window.Width, window.Height);
+            windowRect = new Rectangle(worldx, worldy, window.Width, window.Height);
         }
 
         void PrintHello()

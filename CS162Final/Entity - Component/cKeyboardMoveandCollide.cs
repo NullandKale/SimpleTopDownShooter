@@ -49,8 +49,7 @@ namespace nullEngine.Entity___Component
             if(moved)
             {
                 Point p = Managers.CollisionManager.WillItCollide(collider, xMove, yMove);
-                r.pos.xPos += p.X;
-                r.pos.yPos += p.Y;
+                r.setRelativePos(p);
             }
         }
     }
