@@ -8,11 +8,12 @@ namespace nullEngine.Entity___Component
 {
     class cDeactivateOnCollide : cCollider
     {
-        List<int> colliding;
+        List<cCollider> colliding;
+        renderable PC;
 
-        public cDeactivateOnCollide(renderable r) : base (r)
+        public cDeactivateOnCollide(renderable r, renderable player) : base (r)
         {
-
+            PC = player;
         }
 
         public override void Run(renderable r)
@@ -21,12 +22,26 @@ namespace nullEngine.Entity___Component
 
             colliding = Managers.CollisionManager.man.CheckCollision(this);
 
-            for(int i = 0; i < colliding.Count; i++)
+            //if(colliding.Count > 0)
+            //{
+            //    if(Managers.CollisionManager.man.boundingBoxes.ContainsKey(this.key))
+            //    {
+            //        if (col.Count > 0)
+            //        {
+            //            if (col[colliding[0]].rRef != PC)
+            //            {
+            //                col[].rRef.active = false;
+            //            }
+            //        }
+            //    }
+            //}
+
+            //This was intended to allow the object to collide with more than one thing at a time, but it causes a crash whenever there is more than one object in the list.
+            for (int i = 0; i < colliding.Count; i++)
             {
-                if(Managers.CollisionManager.man.boundingBoxes[this.key][i].rRef.tag != "Player")
+                if (colliding[i].rRef != PC)
                 {
-                    Managers.CollisionManager.man.boundingBoxes[this.key][i].rRef.active = false;
-                    Console.WriteLine(Managers.CollisionManager.man.boundingBoxes[this.key][i].rRef.pos.xPos + " " + Managers.CollisionManager.man.boundingBoxes[this.key][i].rRef.pos.yPos);
+                    colliding[i].rRef.active = false;
                 }
             }
         }

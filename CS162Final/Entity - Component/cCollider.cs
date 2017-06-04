@@ -24,11 +24,14 @@ namespace nullEngine.Entity___Component
 
         public virtual void Run(renderable r)
         {
-            if((int)r.pos.xPos != rect.X || (int)r.pos.yPos != rect.Y)
+            if(r.active)
             {
-                rect.X = (int)r.pos.xPos;
-                rect.Y = (int)r.pos.yPos;
-                Managers.CollisionManager.moveCollider(this);
+                if ((int)r.pos.xPos != rect.X || (int)r.pos.yPos != rect.Y)
+                {
+                    rect.X = (int)r.pos.xPos;
+                    rect.Y = (int)r.pos.yPos;
+                    Managers.CollisionManager.moveCollider(this);
+                }
             }
         }
 
@@ -50,11 +53,6 @@ namespace nullEngine.Entity___Component
             }
 
             return rect.IntersectsWith(otherRect);
-        }
-
-        public virtual void callback(cCollider c)
-        {
-
         }
     }
 }

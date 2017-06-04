@@ -88,9 +88,9 @@ namespace nullEngine.Managers
             return p;
         }
 
-        public List<int> CheckCollision(Entity___Component.cCollider c)
+        public List<Entity___Component.cCollider> CheckCollision(Entity___Component.cCollider c)
         {
-            List<int> temp = new List<int>();
+            List<Entity___Component.cCollider> temp = new List<Entity___Component.cCollider>();
             Point cKey = getKey(c.rect);
 
             for (int i = -1; i <= 1; i++)
@@ -104,7 +104,7 @@ namespace nullEngine.Managers
                         {
                             if (c.collides(boundingBoxes[key][k]) && c != boundingBoxes[key][k])
                             {
-                                temp.Add(k);
+                                temp.Add(boundingBoxes[key][k]);
                             }
                         }
                     }

@@ -16,7 +16,6 @@ namespace nullEngine.Entity___Component
         renderable target;
 
         Point targetPos;
-        bool atTargetPos;
 
         public cEnemyAI(int moveSpeed, cCollider c, renderable target, int dist)
         {
@@ -25,39 +24,38 @@ namespace nullEngine.Entity___Component
             collider = c;
             this.target = target;
             targetPos = pickNewTargetLoc();
-            atTargetPos = false;
         }        
 
         public void Run(renderable r)
         {
-            Point move = moveTowardsTarget(targetPos);
-
-            if(Math.Abs(target.pos.xPos - r.pos.xPos) < viewDistance)
+            if(r.active)
             {
-                if(target.pos.xPos > r.pos.xPos)
-                {
-                    move.X = speed;
-                }
-                if(target.pos.xPos < r.pos.xPos)
-                {
-                    move.X = -speed;
-                }
-            }
+                Point move = moveTowardsTarget(targetPos);
 
-            if (Math.Abs(target.pos.yPos - r.pos.yPos) < viewDistance)
-            {
-                if (target.pos.yPos > r.pos.yPos)
+                if (Math.Abs(target.pos.xPos - r.pos.xPos) < viewDistance && Math.Abs(target.pos.yPos - r.pos.yPos) < viewDistance)
                 {
-                    move.Y = -speed;
-                }
-                if (target.pos.yPos < r.pos.yPos)
-                {
-                    move.Y = speed;
-                }
-            }
+                    if (target.pos.xPos > r.pos.xPos)
+                    {
+                        move.X = speed;
+                    }
+                    if (target.pos.xPos < r.pos.xPos)
+                    {
+                        move.X = -speed;
+                    }
 
-            Point p = Managers.CollisionManager.WillItCollide(collider, move.X, move.Y);
-            r.setRelativePos(p);
+                    if (target.pos.yPos < r.pos.yPos)
+                    {
+                        move.Y = -speed;
+                    }
+                    if (target.pos.yPos > r.pos.yPos)
+                    {
+                        move.Y = speed;
+                    }
+                }
+
+                Point p = Managers.CollisionManager.WillItCollide(collider, move.X, move.Y);
+                r.setRelativePos(p);
+            }
         }
 
         Point moveTowardsTarget(Point p)
@@ -84,7 +82,7 @@ namespace nullEngine.Entity___Component
 
             if(Math.Abs(p.X - collider.rect.X) < 20 && Math.Abs(p.Y - collider.rect.Y) < 20)
             {
-                atTargetPos = true;
+                targetPos = pickNewTargetLoc();
             }
 
             return new Point(moveX, moveY);

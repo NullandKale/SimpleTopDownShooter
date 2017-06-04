@@ -14,10 +14,11 @@ namespace nullEngine.Managers
         public static EnemyManager man;
 
         renderable[] enemies;
+        renderable playerCharacter;
         List<int> activeEnemies;
         int level;
 
-        public EnemyManager(renderable[] enemies)
+        public EnemyManager(renderable[] enemies, renderable player)
         {
             if(man == null)
             {
@@ -29,6 +30,7 @@ namespace nullEngine.Managers
             }
             this.enemies = enemies;
             activeEnemies = new List<int>();
+            playerCharacter = player;
             level = 0;
         }
 
@@ -113,7 +115,14 @@ namespace nullEngine.Managers
 
         public Point getRandomPos()
         {
-            return new Point(Game.rng.Next(5, Game.worldMaxX), Game.rng.Next(5, Game.worldMaxY));
+            Point p = new Point(Game.rng.Next(5, Game.worldMaxX - 64), Game.rng.Next(5, Game.worldMaxY - 64));
+
+            //if the point is too close to the player get a new point
+            if(Math.Abs(p.X - playerCharacter.pos.xPos) < 100 && Math.Abs(p.X - playerCharacter.pos.xPos) < 100)
+            {
+                p = getRandomPos();
+            }
+            return p;
         }
 
         public int getEnemyCount(int level)

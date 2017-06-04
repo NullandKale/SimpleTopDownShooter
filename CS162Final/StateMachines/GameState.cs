@@ -17,13 +17,13 @@ namespace nullEngine.StateMachines
 
         public quad background;
         public quad playerCharacter;
-        public quad f;
+        public quad[] bullets;
         public quad[] badGuy;
 
         public GameState()
         {
-            Game.worldMaxX = 2000;
-            Game.worldMaxY = 2000;
+            Game.worldMaxX = 1800;
+            Game.worldMaxY = 1000;
 
             pState = GameStateManager.man.pState;
             updaters = new List<Action>();
@@ -37,31 +37,40 @@ namespace nullEngine.StateMachines
             playerCharacter = new quad("Content/roguelikeCharBeard_transparent.png");
             playerCharacter.AddComponent(new cFollowCamera(playerCharacter));
             cCollider playerCollider = new cCollider(playerCharacter);
+            cMouseFire playerBulletMan = new cMouseFire(playerCharacter);
             playerCharacter.AddComponent(playerCollider);
             playerCharacter.AddComponent(new cKeyboardMoveandCollide(5, playerCollider));
+            playerCharacter.AddComponent(playerBulletMan);
             playerCharacter.pos.xPos = Game.window.Width / 2 + 10;
             playerCharacter.pos.yPos = Game.window.Height / 2 + 10;
             playerCharacter.AddComponent(new cDEBUG_POS());
             playerCharacter.tag = "Player";
             updaters.Add(playerCharacter.update);
 
-            f = new quad("Content/bullet.png");
-            f.active = false;
-            f.AddComponent(new cMouseFire(f, 20, playerCharacter));
-            f.AddComponent(new cDeactivateOnCollide(f));
-            updaters.Add(f.update);
+            bullets = new quad[10];
+            for(int i = 0; i < bullets.Length; i++)
+            {
+                bullets[i] = new quad("Content/bullet.png");
+                bullets[i].active = false;
+                bullets[i].AddComponent(new cDeactivateOnCollide(bullets[i], playerCharacter));
+                bullets[i].AddComponent(new cDeactivateAfter(1000));
+                cFireable bulletFireable = new cFireable(bullets[i], 20);
+                bullets[i].AddComponent(bulletFireable);
+                playerBulletMan.addBullet(bulletFireable);
+                updaters.Add(bullets[i].update);
+            }
 
-            badGuy = new quad[100];
+            badGuy = new quad[5000];
             for (int j = 0; j < badGuy.Length; j++)
             {
                 badGuy[j] = new quad("Content/roguelikeCharBeard_transparent.png");
                 cCollider badguyCollider = new cCollider(badGuy[j]);
                 badGuy[j].AddComponent(badguyCollider);
-                badGuy[j].AddComponent(new cEnemyAI(5, badguyCollider, playerCharacter, 100));
+                badGuy[j].AddComponent(new cEnemyAI(3, badguyCollider, playerCharacter, 300));
                 badGuy[j].active = false;
                 updaters.Add(badGuy[j].update);
             }
-            eMan = new Managers.EnemyManager(badGuy);
+            eMan = new Managers.EnemyManager(badGuy, playerCharacter);
             updaters.Add(eMan.update);
         }
 
@@ -78,11 +87,6 @@ namespace nullEngine.StateMachines
             if(Game.input.KeyFallingEdge(OpenTK.Input.Key.Escape))
             {
                 toPauseState();
-            }
-
-            if(Game.input.isClickedRising(OpenTK.Input.MouseButton.Left))
-            {
-                f.active = true;
             }
 
             for (int i = 0; i < updaters.Count; i++)

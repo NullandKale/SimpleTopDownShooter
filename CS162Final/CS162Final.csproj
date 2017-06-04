@@ -55,9 +55,11 @@
     <Compile Include="Entity - Component\Button.cs" />
     <Compile Include="Entity - Component\cCollider.cs" />
     <Compile Include="Entity - Component\cColliderMovementStop.cs" />
+    <Compile Include="Entity - Component\cDeactivateAfter.cs" />
     <Compile Include="Entity - Component\cDeactivateOnCollide.cs" />
     <Compile Include="Entity - Component\cDEBUG_POS.cs" />
-    <Compile Include="Entity - Component\cEnemy.cs" />
+    <Compile Include="Entity - Component\cEnemyAI.cs" />
+    <Compile Include="Entity - Component\cFireable.cs" />
     <Compile Include="Entity - Component\cFollowCamera.cs" />
     <Compile Include="Entity - Component\cKeyboardMoveandCollide.cs" />
     <Compile Include="Entity - Component\cMouseFire.cs" />
