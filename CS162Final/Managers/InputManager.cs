@@ -6,37 +6,49 @@ namespace nullEngine
 {
     class InputManager
     {
+        //keyboard state storage, one for the current frame and one for the last frame
         private KeyboardState lastKeyState;
-        private KeyboardState keyState;
+        private KeyboardState currentKeyState;
 
+        //mouse state storage, one for the current frame and one for the last frame
         private MouseState lastMouseState;
         private MouseState currentMouseState;
 
+        //current frame mouse pos
         public Point mousePos;
 
         public InputManager()
         {
+            //inititalize mousePos and add update function to global update call list
             mousePos = new Point();
             Game.window.UpdateFrame += update;
         }
 
         public void update(object sender, FrameEventArgs e)
         {
-            if(keyState != null)
+            //on update if the currentKeyState is not invalid set lastKeyState to the old currentKeyState
+            if(currentKeyState != null)
             {
-                lastKeyState = keyState;
+                lastKeyState = currentKeyState;
             }
-            keyState = Keyboard.GetState();
 
+            //update currentKeyState
+            currentKeyState = Keyboard.GetState();
+
+            //if the currentMouseState is not invalid set the lastMouseState to the old currentMouseState
             if (currentMouseState != null)
             {
                 lastMouseState = currentMouseState;
             }
+
+            //update currentMouseState
             currentMouseState = Mouse.GetCursorState();
+
+            //update mousePos
             mousePos = Game.window.PointToClient(new Point(currentMouseState.X, currentMouseState.Y));
 
         }
-
+        //mouse state check functions
         public bool isClickedFalling(MouseButton b)
         {
             return currentMouseState.IsButtonUp(b) && lastMouseState.IsButtonDown(b);
@@ -47,6 +59,7 @@ namespace nullEngine
             return currentMouseState.IsButtonDown(b) && lastMouseState.IsButtonUp(b);
         }
 
+        //keyboard state functions
         public bool KeyRisingEdge(Key k)
         {
             if(!isKeystateValid())
@@ -55,7 +68,7 @@ namespace nullEngine
             }
             else
             {
-                return lastKeyState.IsKeyDown(k) && keyState.IsKeyUp(k);
+                return lastKeyState.IsKeyDown(k) && currentKeyState.IsKeyUp(k);
             }
         }
 
@@ -67,7 +80,7 @@ namespace nullEngine
             }
             else
             {
-                return lastKeyState.IsKeyUp(k) && keyState.IsKeyDown(k);
+                return lastKeyState.IsKeyUp(k) && currentKeyState.IsKeyDown(k);
             }
         }
 
@@ -79,13 +92,14 @@ namespace nullEngine
             }
             else
             {
-                return lastKeyState.IsKeyDown(k) && keyState.IsKeyDown(k);
+                return lastKeyState.IsKeyDown(k) && currentKeyState.IsKeyDown(k);
             }
         }
 
+        //check that the keyboard state is valid | this might not be needed
         private bool isKeystateValid()
         {
-            return keyState != null && lastKeyState != null;
+            return currentKeyState != null && lastKeyState != null;
         }
     }
 }

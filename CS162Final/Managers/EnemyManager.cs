@@ -118,7 +118,7 @@ namespace nullEngine.Managers
             Point p = new Point(Game.rng.Next(5, Game.worldMaxX - 64), Game.rng.Next(5, Game.worldMaxY - 64));
 
             //if the point is too close to the player get a new point
-            if(Math.Abs(p.X - playerCharacter.pos.xPos) < 100 && Math.Abs(p.X - playerCharacter.pos.xPos) < 100)
+            if(Math.Abs(p.X - playerCharacter.pos.xPos) < 100 && Math.Abs(p.Y - playerCharacter.pos.yPos) < 100)
             {
                 p = getRandomPos();
             }

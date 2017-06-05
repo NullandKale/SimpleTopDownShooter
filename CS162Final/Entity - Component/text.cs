@@ -9,16 +9,20 @@ using OpenTK.Graphics.OpenGL;
 
 namespace nullEngine.Entity___Component
 {
+    //this is an entity whose texture is text
     public class text : renderable
     {
+        //store the tiles for this text
         public Tile[] tiles;
 
+        //construct a text entity based off of a letter array
         public text(letter[] letters)
         {
             tiles = new Tile[letters.Length];
             pos = new transform();
             components = new List<iComponent>();
 
+            //create the tile array
             for(int i = 0; i < letters.Length; i++)
             {
                 tiles[i] = new Tile();
@@ -26,9 +30,11 @@ namespace nullEngine.Entity___Component
                 tiles[i].tAtlas = Game.font;
             }
 
+            //generate the texture based off of the tile array
             tex = Managers.TextureManager.TextureFrom1DTileMap(tiles);
         }
 
+        //construct a text entity based off of a string
         public text(string s)
         {
             letter[] letters = stringToLetter(s);
@@ -36,6 +42,7 @@ namespace nullEngine.Entity___Component
             pos = new transform();
             components = new List<iComponent>();
 
+            //create the tile array
             for (int i = 0; i < letters.Length; i++)
             {
                 tiles[i] = new Tile();
@@ -43,22 +50,29 @@ namespace nullEngine.Entity___Component
                 tiles[i].tAtlas = Game.font;
             }
 
+            //generate the texture based off of the tile array
             tex = Managers.TextureManager.TextureFrom1DTileMap(tiles);
         }
 
         public override void update()
         {
+            //if the object is active and on screen
             if(active && culled)
             {
+                //enqueue the render function
                 Game.renderQueue.Enqueue(render);
             }
 
+            //do the distance culling 
             base.DistCulling();
         }
 
+        //this is the basic render command
         public override void render()
         {
+            //update the transformation matrix
             pos.updateMatrix();
+            //load the matrix into the GPU
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref pos.modelViewMatrix);
 
@@ -67,6 +81,7 @@ namespace nullEngine.Entity___Component
             //GL.BindTexture(TextureTarget.Texture2D, tex.id);
             Managers.TextureManager.GLSetTexture(tex.id);
 
+            //this draws the rect, setting the texture first and then placing the vertex
             GL.Begin(PrimitiveType.Triangles);
 
             GL.TexCoord2(tex.xStart, tex.yStart);
@@ -87,19 +102,23 @@ namespace nullEngine.Entity___Component
             GL.TexCoord2(tex.xEnd, tex.yEnd);
             GL.Vertex2(tex.width, tex.height);
 
+            //this finishes the current object draw
             GL.End();
         }
 
+        //performs a transform for the width into actual pixels on the screen
         public override int getWidth()
         {
             return tex.width * transform.masterScale;
         }
 
+        //performs a transform for the height into actual pixels on the screen
         public override int getHeight()
         {
             return tex.height * transform.masterScale;
         }
 
+        //this just runs the charToLetter command on every char in a string and returns a letter array
         public static letter[] stringToLetter(string s)
         {
             char[] c = s.ToCharArray();
@@ -113,6 +132,7 @@ namespace nullEngine.Entity___Component
             return l;
         }
 
+        //this converts a char to a letter as the chars are ordered in the ansi order
         public static letter charToLetter(char c)
         {
             return (letter)((int)c - (int)' ');

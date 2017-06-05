@@ -27,12 +27,15 @@ namespace nullEngine
 
         private Matrix4 projMatrix;
 
-        static int worldx = 0;
-        static int worldy = 0;
+        private static int worldx = 0;
+        private static int worldy = 0;
         public static int worldMaxX;
         public static int worldMaxY;
 
+        //a global rect that contains the entire play space
         public static Rectangle worldRect;
+        
+        //a gobal rect that contains the window space
         public static Rectangle windowRect;
 
         public static int worldCenterX
@@ -55,18 +58,17 @@ namespace nullEngine
 
         public Game(GameWindow w)
         {
+            //init global RNG
             rng = new Random();
+
+            //initialize window data
             window = w;
             worldMaxX = int.MaxValue;
             worldMaxY = int.MaxValue;
-
             worldRect = new Rectangle(0, 0, worldMaxX, worldMaxY);
             windowRect = new Rectangle(worldx, worldy, window.Width, window.Height);
 
-            window.Load += window_Load;
-            window.UpdateFrame += window_UpdateFrame;
-            window.RenderFrame += window_RenderFrame;
-
+            //initialize managers
             input = new InputManager();
             buttonMan = new ButtonManager();
 
@@ -80,11 +82,19 @@ namespace nullEngine
             //inititialize frame timer;
             sw = new Stopwatch();
             frameTime = 0;
+
+            //initialize render Queue
             renderQueue = new Queue<Action>();
+
+            //add load update and ender functions to global call lists
+            window.Load += window_Load;
+            window.UpdateFrame += window_UpdateFrame;
+            window.RenderFrame += window_RenderFrame;
         }
 
         void window_Load(object sender, EventArgs e)
         {
+            //OpenGl initialization stuff
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.Enable(EnableCap.DepthTest);
@@ -96,6 +106,7 @@ namespace nullEngine
 
         void window_UpdateFrame(object sender, FrameEventArgs e)
         {
+            //update window data everyframe
             projMatrix = Matrix4.CreateOrthographicOffCenter(worldx, window.Width + worldx, window.Height + worldy, worldy, 0, 1);
             windowRect.X = worldx;
             windowRect.Y = worldy;
@@ -104,12 +115,16 @@ namespace nullEngine
 
         void window_RenderFrame(object sender, FrameEventArgs e)
         {
+            //OpenGL render stuff
             GL.ClearColor(Color.DimGray);
             GL.ClearDepth(1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            //Load projection Matrix
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref projMatrix);
 
+            //while there is something left in the render queue run that renderer
             while (renderQueue.Count != 0)
             {
                 renderQueue.Dequeue().Invoke();
@@ -132,11 +147,13 @@ namespace nullEngine
             }
         }
 
+        //transform a point from screenspace to world space
         public static Point ScreenToWorldSpace(Point p)
         {
             return new Point(p.X + worldx, p.Y + worldy);
         }
 
+        //set window center to said world point
         public static void SetWindowCenter(int x, int y)
         {
             worldx = x - (window.Width / 2);
@@ -144,11 +161,7 @@ namespace nullEngine
             windowRect = new Rectangle(worldx, worldy, window.Width, window.Height);
         }
 
-        void PrintHello()
-        {
-            Console.WriteLine("Hello World!");
-        }
-
+        //reset tick every 20 frames
         void Tick()
         {
             tick++;

@@ -10,11 +10,17 @@ namespace nullEngine.StateMachines
 {
     class GameState : iState
     {
+        // keep a reference to the state it can change to
         PauseState pState;
+
+        // keep a list of the contained entities update functions
         List<Action> updaters;
+
+        //game manager singletons
         Managers.CollisionManager col;
         Managers.EnemyManager eMan;
 
+        //game entities
         public quad background;
         public quad playerCharacter;
         public quad[] bullets;
@@ -22,18 +28,24 @@ namespace nullEngine.StateMachines
 
         public GameState()
         {
+            //set worldSize to 1000 x 1000
             Game.worldMaxX = 1800;
             Game.worldMaxY = 1000;
 
+            //get a reference to pause state
             pState = GameStateManager.man.pState;
+
+            //initialize list of entity updaters and the collision manager singleton
             updaters = new List<Action>();
             col = new Managers.CollisionManager(100);
 
+            //initialize background entity
             background = new quad("Content/grass.png");
             background.pos.xScale = 1f / 2f;
             background.pos.yScale = 1f / 2f;
             updaters.Add(background.update);
 
+            //initialize player character entity
             playerCharacter = new quad("Content/roguelikeCharBeard_transparent.png");
             playerCharacter.AddComponent(new cFollowCamera(playerCharacter));
             cCollider playerCollider = new cCollider(playerCharacter);
@@ -47,6 +59,7 @@ namespace nullEngine.StateMachines
             playerCharacter.tag = "Player";
             updaters.Add(playerCharacter.update);
 
+            //initialize bullets
             bullets = new quad[10];
             for(int i = 0; i < bullets.Length; i++)
             {
@@ -60,6 +73,7 @@ namespace nullEngine.StateMachines
                 updaters.Add(bullets[i].update);
             }
 
+            //initialize eneimes
             badGuy = new quad[5000];
             for (int j = 0; j < badGuy.Length; j++)
             {
@@ -70,10 +84,13 @@ namespace nullEngine.StateMachines
                 badGuy[j].active = false;
                 updaters.Add(badGuy[j].update);
             }
+
+            //inintialize enemy managers
             eMan = new Managers.EnemyManager(badGuy, playerCharacter);
             updaters.Add(eMan.update);
         }
 
+        //called whenever a state is entered
         public void enter()
         {
             Console.WriteLine("Entered GameState");
@@ -81,14 +98,16 @@ namespace nullEngine.StateMachines
 
         public void update()
         {
+            //check that all the states that this state can transititon to 
             checkStates();
-            col.update();
 
+            //if escape pressed transition to pause state
             if(Game.input.KeyFallingEdge(OpenTK.Input.Key.Escape))
             {
                 toPauseState();
             }
 
+            //run all entities update functions
             for (int i = 0; i < updaters.Count; i++)
             {
                 updaters[i].Invoke();

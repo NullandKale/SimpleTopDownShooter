@@ -66,8 +66,10 @@ namespace nullEngine.Entity___Component
             return -1;
         }
 
+        //find the component of type T
         public T GetComponent<T> ()
         {
+            //get the compenent 
             int temp = FindComponent<T>();
             if (temp == -1)
             {
@@ -103,6 +105,7 @@ namespace nullEngine.Entity___Component
 
     public class transform
     {
+        //data storage
         public static int masterScale = 4;
         public float xPos = 0;
         public float yPos = 0;
@@ -115,6 +118,8 @@ namespace nullEngine.Entity___Component
 
         public Matrix4 modelViewMatrix;
 
+        //update the modelViewMatrix based off of the stored info
+        //if it wasnt for this function this would be a struct
         public void updateMatrix()
         {
               modelViewMatrix = Matrix4.CreateScale(xScale * masterScale, yScale * masterScale, 1f) * 
@@ -123,6 +128,7 @@ namespace nullEngine.Entity___Component
         }
     }
 
+    //this struct defines the location for all of the verticies for a triangle
     public struct triangle
     {
         public Vector2 a;

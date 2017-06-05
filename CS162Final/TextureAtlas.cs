@@ -8,24 +8,29 @@ namespace nullEngine
 {
     public class TextureAtlas
     {
+        //total atlas pixel size
         public int pixelWidth;
         public int pixelHeight;
 
+        //tile pixel size
         public int tilePixelWidth;
         public int tilePixelHeight;
+        private int _padding;
 
+        //texture atlas tile sizes
         public int tileWidth;
         public int tileHeight;
 
+        //texture info
         public string path;
-
         private Texture2D baseTexture;
-        private int _padding;
 
         public TextureAtlas(string TexturePath, int xTileCount, int yTileCount, int pixelsPerTileX, int pixelsPerTileY, int padding)
         {
+            //get base texture
             baseTexture = Managers.TextureManager.LoadTexture(TexturePath, false);
 
+            //set variables based off of constructor
             path = TexturePath;
 
             pixelWidth = baseTexture.width + 1;
@@ -39,12 +44,16 @@ namespace nullEngine
             _padding = padding;
         }
 
+        //get a textuee for the tile
         public Texture2D getTile(int index)
         {
+            //determine the x and y pixel offset
             int xOffset = (index % tileWidth);
             int yOffset = (index / tileWidth);
 
             float xPixels, yPixels, xPixEnd, yPixEnd;
+
+            //calculate xstart and xend locations
             if(xOffset != 0)
             {
                 xPixels = ((float)xOffset * (tilePixelWidth + _padding)) / pixelWidth;
@@ -56,6 +65,7 @@ namespace nullEngine
                 xPixEnd = (float)tilePixelWidth / pixelWidth;
             }
 
+            //calculate ystart and yend pixel locations
             if (yOffset != 0)
             {
                 yPixels = ((float)yOffset * (tilePixelHeight + _padding)) / pixelHeight;
@@ -67,6 +77,7 @@ namespace nullEngine
                 yPixEnd = (float)tilePixelHeight / pixelHeight;
             }
 
+            //generate texture and return
             return new Texture2D(baseTexture.id, pixelWidth, pixelHeight, xPixels, yPixels, xPixEnd, yPixEnd);
         }
     }

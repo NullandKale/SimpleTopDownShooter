@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace nullEngine.Managers
 {
+    //this is an exception for whenever a singleton is instantiated twice
     class SingletonException : Exception
     {
         public SingletonException(object o)

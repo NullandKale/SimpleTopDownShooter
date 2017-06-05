@@ -8,12 +8,14 @@ using System.Drawing;
 
 namespace nullEngine
 {
+    //this is a struct for each tile
     public class Tile
     {
         public int TexID;
         public TextureAtlas tAtlas;
     }
     
+    //this is an enum for all of the letters supported by /Content/font.png
     public enum letter
     {
         space = 0,

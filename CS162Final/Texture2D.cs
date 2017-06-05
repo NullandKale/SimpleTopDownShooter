@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace nullEngine
 {
+    //this is a class to store all of the necessary texture data
     public class Texture2D
     {
         private int _id;
