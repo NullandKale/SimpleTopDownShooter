@@ -3,7 +3,7 @@ This is a game using the "Engine" from NullandKale/OpenTKTests
 
 I started this as a interesting project for my CS162 final, of course I decided to do something far too complicated and as such I am implementing my own game engine and creating a Simple Top Down Shooter with said engine. I am attempting to use no external libraries besides OpenTK, with exposes OpenGL in C#. The following is a todo list based on the requirements of this final. When the item is crossed off the todo list it will be moved to the done section below and include a link to the best example of that requirement.
 
-Before I continue I'd like to explain one thing I do in comments that can be confusing for some people. If I am going to continue a comment in a few lines or so, above the corresponding code I will end the comment with a double tilde "/~~", and then pickup the next comment with another double tilde "/~~".
+Before I continue I'd like to explain one thing I do in comments that can be confusing for some people. If I am going to continue a comment in a few lines or so, above the corresponding code I will end the comment with a double tilde "~/~", and then pickup the next comment with another double tilde "~/~".
 
 ## TODO
   1. Implement a health system for the player
