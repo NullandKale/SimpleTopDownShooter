@@ -31,7 +31,7 @@ namespace nullEngine.Managers
             this.enemies = enemies;
             activeEnemies = new List<int>();
             playerCharacter = player;
-            level = 10;
+            level = 0;
         }
 
         public void update()
@@ -61,6 +61,12 @@ namespace nullEngine.Managers
             {
                 man.spawn(arrayPos, r);
             }
+        }
+
+        public void Reset()
+        {
+            level = 0;
+            cleanEnemies();
         }
 
         public void spawn(int arrayPos, renderable r)

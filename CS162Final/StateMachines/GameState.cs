@@ -12,6 +12,7 @@ namespace nullEngine.StateMachines
     {
         // keep a reference to the state it can change to
         PauseState pState;
+        MenuState mState;
 
         // keep a list of the contained entities update functions
         List<Action> updaters;
@@ -23,8 +24,11 @@ namespace nullEngine.StateMachines
         //game entities
         public quad background;
         public quad playerCharacter;
+        private cHealth playerHealth;
         public quad[] bullets;
         public quad[] badGuy;
+
+        public Button gameover;
 
         public GameState()
         {
@@ -34,6 +38,7 @@ namespace nullEngine.StateMachines
 
             //get a reference to pause state
             pState = GameStateManager.man.pState;
+            mState = GameStateManager.man.mState;
 
             //initialize list of entity updaters and the collision manager singleton
             updaters = new List<Action>();
@@ -50,6 +55,8 @@ namespace nullEngine.StateMachines
             playerCharacter.AddComponent(new cFollowCamera(playerCharacter));
             cCollider playerCollider = new cCollider(playerCharacter);
             cMouseFire playerBulletMan = new cMouseFire(playerCharacter);
+            playerHealth = new cHealth(10, playerCharacter, this, 30);
+            playerCharacter.AddComponent(playerHealth);
             playerCharacter.AddComponent(playerCollider);
             playerCharacter.AddComponent(new cKeyboardMoveandCollide(5, playerCollider));
             playerCharacter.AddComponent(playerBulletMan);
@@ -79,6 +86,7 @@ namespace nullEngine.StateMachines
             {
                 badGuy[j] = new quad("Content/roguelikeCharBeard_transparent.png");
                 cCollider badguyCollider = new cCollider(badGuy[j]);
+                badGuy[j].AddComponent(new cDamagePlayer(playerCharacter, playerHealth, 1, badguyCollider));
                 badGuy[j].AddComponent(badguyCollider);
                 badGuy[j].AddComponent(new cEnemyAI(3, badguyCollider, playerCharacter, 300));
                 badGuy[j].active = false;
@@ -88,6 +96,11 @@ namespace nullEngine.StateMachines
             //inintialize enemy managers
             eMan = new Managers.EnemyManager(badGuy, playerCharacter);
             updaters.Add(eMan.update);
+
+            gameover = new Button("Game Over. Click to go to Main Menu", Game.buttonBackground, toMenuState, OpenTK.Input.MouseButton.Left, this);
+            gameover.SetCenterPos(new System.Drawing.Point(Game.worldCenterX, Game.worldCenterY));
+            gameover.SetActive(false);
+            updaters.Add(gameover.update);
         }
 
         //called whenever a state is entered
@@ -123,10 +136,27 @@ namespace nullEngine.StateMachines
 
         private void checkStates()
         {
-            if (pState == null)
+            if (pState == null || mState == null)
             {
+                mState = GameStateManager.man.mState;
                 pState = GameStateManager.man.pState;
             }
+        }
+
+        public void Gameover()
+        {
+            gameover.SetActive(true);
+            Managers.EnemyManager.man.Reset();
+        }
+
+        private void toMenuState()
+        {
+            gameover.SetActive(false);
+            playerCharacter.active = true;
+            playerHealth.resurrect();
+            Console.WriteLine("Changing to MenuState");
+            GameStateManager.man.CurrentState = GameStateManager.man.mState;
+            mState.enter();
         }
     }
 }

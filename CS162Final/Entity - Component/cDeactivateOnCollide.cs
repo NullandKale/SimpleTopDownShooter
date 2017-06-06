@@ -22,21 +22,6 @@ namespace nullEngine.Entity___Component
 
             colliding = Managers.CollisionManager.man.CheckCollision(this);
 
-            //if(colliding.Count > 0)
-            //{
-            //    if(Managers.CollisionManager.man.boundingBoxes.ContainsKey(this.key))
-            //    {
-            //        if (col.Count > 0)
-            //        {
-            //            if (col[colliding[0]].rRef != PC)
-            //            {
-            //                col[].rRef.active = false;
-            //            }
-            //        }
-            //    }
-            //}
-
-            //This was intended to allow the object to collide with more than one thing at a time, but it causes a crash whenever there is more than one object in the list.
             for (int i = 0; i < colliding.Count; i++)
             {
                 if (colliding[i].rRef != PC)

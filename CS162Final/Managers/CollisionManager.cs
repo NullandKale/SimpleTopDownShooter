@@ -156,6 +156,45 @@ namespace nullEngine.Managers
             return temp;
         }
 
+        public List<Entity___Component.cCollider> CheckCollision(Entity___Component.cCollider c, int buffer)
+        {
+            //create a list to hold all of the objects that might be colliding
+            List<Entity___Component.cCollider> temp = new List<Entity___Component.cCollider>();
+
+            //get the key for the collidable that is being checked 
+            Point cKey = getKey(c.rect);
+            Rectangle rect = new Rectangle(c.rect.X - buffer, c.rect.Y - buffer, c.rect.Width + buffer, c.rect.Height + buffer);
+
+            //for all of the surrounding bounding boxes --
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    //-- generate the key for that bounding box --
+                    Point key = new Point(cKey.X + i, cKey.Y + j);
+
+                    //-- if the key has any objects in it -- 
+                    if (boundingBoxes.ContainsKey(key))
+                    {
+                        //-- for all of said objects ~~
+                        List<Entity___Component.cCollider> box = boundingBoxes[key];
+                        for (int k = 0; k < box.Count; k++)
+                        {
+                            //~~ if the object collides with the calling object and it is not the calling object ~~
+                            if (box[k].collides(rect, c) && c != box[k])
+                            {
+                                //~~ add that object to the list to return
+                                temp.Add(box[k]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //return all the objects that are colliding
+            return temp;
+        }
+
         public Boolean CheckForLeaveWorld(Rectangle rect)
         {
             //if the given rect is outside the world even a little bit return true

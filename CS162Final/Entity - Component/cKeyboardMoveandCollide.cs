@@ -20,36 +20,39 @@ namespace nullEngine.Entity___Component
 
         public override void Run(renderable r)
         {
-            int xMove = 0;
-            int yMove = 0;
+            if(r.active)
+            {
+                int xMove = 0;
+                int yMove = 0;
 
-            bool moved = false;
+                bool moved = false;
 
-            if (Game.input.KeyHeld(Key.W))
-            {
-                yMove -= speed;
-                moved = true;
-            }
-            if (Game.input.KeyHeld(Key.S))
-            {
-                yMove += speed;
-                moved = true;
-            }
-            if (Game.input.KeyHeld(Key.A))
-            {
-                xMove -= speed;
-                moved = true;
-            }
-            if (Game.input.KeyHeld(Key.D))
-            {
-                xMove += speed;
-                moved = true;
-            }
-            
-            if(moved)
-            {
-                Point p = Managers.CollisionManager.WillItCollide(collider, xMove, yMove);
-                r.setRelativePos(p);
+                if (Game.input.KeyHeld(Key.W))
+                {
+                    yMove -= speed;
+                    moved = true;
+                }
+                if (Game.input.KeyHeld(Key.S))
+                {
+                    yMove += speed;
+                    moved = true;
+                }
+                if (Game.input.KeyHeld(Key.A))
+                {
+                    xMove -= speed;
+                    moved = true;
+                }
+                if (Game.input.KeyHeld(Key.D))
+                {
+                    xMove += speed;
+                    moved = true;
+                }
+
+                if (moved)
+                {
+                    Point p = Managers.CollisionManager.WillItCollide(collider, xMove, yMove);
+                    r.setRelativePos(p);
+                }
             }
         }
     }
