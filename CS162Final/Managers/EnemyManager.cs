@@ -31,7 +31,7 @@ namespace nullEngine.Managers
             this.enemies = enemies;
             activeEnemies = new List<int>();
             playerCharacter = player;
-            level = 0;
+            level = 10;
         }
 
         public void update()

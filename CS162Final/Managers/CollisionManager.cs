@@ -46,7 +46,7 @@ namespace nullEngine.Managers
             boundSize = minBoundSize;
 
             // initialize the bounding box dict
-            boundingBoxes = new Dictionary<Point, List<Entity___Component.cCollider>>();
+            boundingBoxes = new Dictionary<Point, List<Entity___Component.cCollider>>(new pointHashCode());
         }
 
         //add the collider to the list in the dict
@@ -224,5 +224,27 @@ namespace nullEngine.Managers
             return false;
         }
 
+    }
+}
+
+//this is a replacement for System.Drawing.Point's hashcode because it was just obj.x xor obj.y and that caused a TON of collisions
+public class pointHashCode : IEqualityComparer<Point>
+{
+    public bool Equals(Point x, Point y)
+    {
+        if(x.X == y.X && x.Y == y.Y)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    //set bitshift x 16 to the right and then clear the top 16 bits of Y and add the two together
+    public int GetHashCode(Point obj)
+    {
+        return obj.X << 16 + (short)obj.Y;
     }
 }
