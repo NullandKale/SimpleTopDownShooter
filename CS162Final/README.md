@@ -3,7 +3,7 @@ This is a game using the "Engine" from NullandKale/OpenTKTests
 
 I started this as a interesting project for my CS162 final, of course I decided to do something far too complicated and as such I am implementing my own game engine and creating a Simple Top Down Shooter with said engine. I am attempting to use no external libraries besides OpenTK, with exposes OpenGL in C#. The following is a todo list based on the requirements of this final. When the item is crossed off the todo list it will be moved to the done section below and include a link to the best example of that requirement.
 
-Before I continue I'd like to explain one thing I do in comments that can be confusing for some people. If I am going to continue a comment in a few lines or so, above the corresponding code I will end the comment with a double tilde "~~", and then pickup the next comment with another double tilde "~~".
+Before I continue I'd like to explain one thing I do in comments that can be confusing for some people. If I am going to continue a comment in a few lines or so, above the corresponding code I will end the comment with a double tilde "~/~", and then pickup the next comment with another double tilde "~/~".
 
 ## TODO
   1. Implement a health system for the player
@@ -20,6 +20,6 @@ Before I continue I'd like to explain one thing I do in comments that can be con
   6. Recursion | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Managers/EnemyManager.cs)
   7. Nested classes | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/StateMachines/GameState.cs)
   8. GUI components, Event listeners, and their various uses | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/StateMachines/MenuState.cs)
-  9. Exceptions | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Managers/SingletonException.cs)
+  9. Exceptions | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Managers/SingletonException.cs) 
   10.Inheritance and Polymorphism | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Entity%20-%20Component/Button.cs)
   11. Comment EVERYTHING
