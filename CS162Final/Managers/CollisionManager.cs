@@ -138,13 +138,14 @@ namespace nullEngine.Managers
                     if (boundingBoxes.ContainsKey(key))
                     {
                         //-- for all of said objects ~~
-                        for (int k = 0; k < boundingBoxes[key].Count; k++)
+                        List<Entity___Component.cCollider> box = boundingBoxes[key];
+                        for (int k = 0; k < box.Count; k++)
                         {
                             //~~ if the object collides with the calling object and it is not the calling object ~~
-                            if (c.collides(boundingBoxes[key][k]) && c != boundingBoxes[key][k])
+                            if (c.collides(box[k]) && c != box[k])
                             {
                                 //~~ add that object to the list to return
-                                temp.Add(boundingBoxes[key][k]);
+                                temp.Add(box[k]);
                             }
                         }
                     }
@@ -206,11 +207,12 @@ namespace nullEngine.Managers
                     //this checks if the corrisponding bounding box has any objects in it
                     if (boundingBoxes.ContainsKey(key))
                     {
+                        List<Entity___Component.cCollider> box = boundingBoxes[key];
                         //for every object in the bounding box --
-                        for (int k = 0; k < boundingBoxes[key].Count; k++)
+                        for (int k = 0; k < box.Count; k++)
                         {
                             //-- check if the bounding box collides and is not the object calling this function return true
-                            if (boundingBoxes[key][k].collides(rect, c) && c != boundingBoxes[key][k])
+                            if (box[k].collides(rect, c) && c != box[k])
                             {
                                 return true;
                             }

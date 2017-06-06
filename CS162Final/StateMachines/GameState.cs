@@ -74,7 +74,7 @@ namespace nullEngine.StateMachines
             }
 
             //initialize eneimes
-            badGuy = new quad[5000];
+            badGuy = new quad[1000];
             for (int j = 0; j < badGuy.Length; j++)
             {
                 badGuy[j] = new quad("Content/roguelikeCharBeard_transparent.png");

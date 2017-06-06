@@ -65,11 +65,13 @@ namespace nullEngine.Managers
 
         public void spawn(int arrayPos, renderable r)
         {
+            //if activeEnemies list is null initialize the list
             if(activeEnemies == null)
             {
                 activeEnemies = new List<int>();
             }
 
+            //
             if(!activeEnemies.Contains(arrayPos))
             {
                 activeEnemies.Add(arrayPos);
@@ -81,50 +83,63 @@ namespace nullEngine.Managers
 
         public void cleanEnemies()
         {
+            //set all enemies to inactive
             for(int i = 0; i < enemies.Length; i++)
             {
                 enemies[i].active = false;
             }
 
+            //clear the active enemies list
             activeEnemies.Clear();
         }
 
         public void respawn(int level)
         {
+            //get the number of enemies to spawn
             int count = getEnemyCount(level);
+
+            //if there are not enough enemies in the pool set the number of enemies to spawn to the number of enemies in the pool
             if(count > enemies.Length)
             {
                 count = enemies.Length;
             }
 
+            //for all of the currently active enemies make sure they are inactive
             for(int i = 0; i < activeEnemies.Count; i++)
             {
                 enemies[activeEnemies[i]].active = false;
             }
 
+            //clear the active enemeies list
             activeEnemies.Clear();
 
+            //for all of the enemies to spawn spawn an enemy from the pool
             for(int i = 0; i < count; i++)
             {
                 spawn(i, enemies[i]);
+                //and add it to the active enemies list
                 activeEnemies.Add(i);
             }
 
+            //debug info
             Console.WriteLine("Level: " + level + " with " + count + " enemies to Kill");
         }
 
         public Point getRandomPos()
         {
+            //generate a random position within the world map
             Point p = new Point(Game.rng.Next(5, Game.worldMaxX - 64), Game.rng.Next(5, Game.worldMaxY - 64));
 
-            //if the point is too close to the player get a new point
+            //if the point is too close to the player call this function again
             if(Math.Abs(p.X - playerCharacter.pos.xPos) < 100 && Math.Abs(p.Y - playerCharacter.pos.yPos) < 100)
             {
                 p = getRandomPos();
             }
+            //return the point
             return p;
         }
 
+        //calculates how many enemies to spawn this is a fibonacci sequence generator
         public int getEnemyCount(int level)
         {
             if(level <= 1)

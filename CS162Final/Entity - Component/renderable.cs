@@ -34,13 +34,16 @@ namespace nullEngine.Entity___Component
 
         public void DistCulling()
         {
-            if (Game.windowRect.IntersectsWith(getRect()))
+            if(active)
             {
-                culled = true;
-            }
-            else
-            {
-                culled = false;
+                if (Game.windowRect.IntersectsWith(getRect()))
+                {
+                    culled = true;
+                }
+                else
+                {
+                    culled = false;
+                }
             }
         }
 
