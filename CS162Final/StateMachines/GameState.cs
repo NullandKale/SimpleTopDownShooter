@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using nullEngine.Entity___Component;
+using System.Drawing;
 
 namespace nullEngine.StateMachines
 {
@@ -21,14 +22,22 @@ namespace nullEngine.StateMachines
         Managers.CollisionManager col;
         Managers.EnemyManager eMan;
 
-        //game entities
+        //general game entities and components
         public quad background;
+        public Button gameover;
+
+        //player related game entities and components
         public quad playerCharacter;
-        private cHealth playerHealth;
+        public cHealth playerHealth;
         public quad[] bullets;
+
+        //enemy related game entities and components
         public quad[] badGuy;
 
-        public Button gameover;
+        //UI elements
+        public Button uiHealth;
+        public Button uiLevel;
+        public Button uiEnemiesLeft;
 
         public GameState()
         {
@@ -73,7 +82,7 @@ namespace nullEngine.StateMachines
                 bullets[i] = new quad("Content/bullet.png");
                 bullets[i].active = false;
                 bullets[i].AddComponent(new cDeactivateOnCollide(bullets[i], playerCharacter));
-                bullets[i].AddComponent(new cDeactivateAfter(1000));
+                bullets[i].AddComponent(new cDeactivateAfter(10000));
                 cFireable bulletFireable = new cFireable(bullets[i], 20);
                 bullets[i].AddComponent(bulletFireable);
                 playerBulletMan.addBullet(bulletFireable);
@@ -93,14 +102,26 @@ namespace nullEngine.StateMachines
                 updaters.Add(badGuy[j].update);
             }
 
-            //inintialize enemy managers
+            //initialize enemy managers
             eMan = new Managers.EnemyManager(badGuy, playerCharacter);
             updaters.Add(eMan.update);
 
+            //initialize UI entities
             gameover = new Button("Game Over. Click to go to Main Menu", Game.buttonBackground, toMenuState, OpenTK.Input.MouseButton.Left, this);
-            gameover.SetCenterPos(new System.Drawing.Point(Game.worldCenterX, Game.worldCenterY));
             gameover.SetActive(false);
             updaters.Add(gameover.update);
+
+            uiHealth = new Button("Health: 00", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
+            uiHealth.t.AddComponent(new cUIHealth(uiHealth.t, playerHealth));
+            updaters.Add(uiHealth.update);
+
+            uiEnemiesLeft = new Button("00 enemies left", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
+            uiEnemiesLeft.t.AddComponent(new cUIEnemiesLeft(uiEnemiesLeft.t));
+            updaters.Add(uiEnemiesLeft.update);
+
+            uiLevel = new Button("Level 00", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
+            uiLevel.t.AddComponent(new cUILevel(uiLevel.t));
+            updaters.Add(uiLevel.update);
         }
 
         //called whenever a state is entered
@@ -111,20 +132,35 @@ namespace nullEngine.StateMachines
 
         public void update()
         {
-            //check that all the states that this state can transititon to 
-            checkStates();
-
-            //if escape pressed transition to pause state
-            if(Game.input.KeyFallingEdge(OpenTK.Input.Key.Escape))
+            if (!gameover.t.active)
             {
-                toPauseState();
-            }
+                //check that all the states that this state can transititon to 
+                checkStates();
 
-            //run all entities update functions
-            for (int i = 0; i < updaters.Count; i++)
-            {
-                updaters[i].Invoke();
+                //if escape pressed transition to pause state
+                if (Game.input.KeyFallingEdge(OpenTK.Input.Key.Escape))
+                {
+                    toPauseState();
+                }
+
+                //run all entities update functions
+                for (int i = 0; i < updaters.Count; i++)
+                {
+                    updaters[i].Invoke();
+                }
+                updateUI();
             }
+            else
+            {
+                gameover.update();
+            }
+        }
+
+        private void updateUI()
+        {
+            uiHealth.SetPos(new Point(Game.windowRect.X, Game.windowRect.Bottom - uiHealth.background.height * transform.masterScale));
+            uiEnemiesLeft.SetPos(new Point(Game.windowRect.Right - uiEnemiesLeft.t.getWidth(), Game.windowRect.Bottom - uiEnemiesLeft.background.height * transform.masterScale));
+            uiLevel.SetPos(new Point(Game.windowRect.X, Game.windowRect.Y));
         }
 
         private void toPauseState()
@@ -145,7 +181,9 @@ namespace nullEngine.StateMachines
 
         public void Gameover()
         {
+            gameover.SetCenterPos(Game.windowRect.Right / 2, Game.windowRect.Bottom / 2);
             gameover.SetActive(true);
+            Game.SetWindowCenter(Game.window.Width / 2, Game.window.Height / 2);
             Managers.EnemyManager.man.Reset();
         }
 

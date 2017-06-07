@@ -163,7 +163,7 @@ namespace nullEngine.Managers
 
             //get the key for the collidable that is being checked 
             Point cKey = getKey(c.rect);
-            Rectangle rect = new Rectangle(c.rect.X - buffer, c.rect.Y - buffer, c.rect.Width + buffer, c.rect.Height + buffer);
+            Rectangle rect = new Rectangle(c.rect.X - buffer, c.rect.Y - buffer, c.rect.Width + (buffer * 2), c.rect.Height + (buffer * 2));
 
             //for all of the surrounding bounding boxes --
             for (int i = -1; i <= 1; i++)

@@ -20,6 +20,7 @@ namespace nullEngine.Entity___Component
         public Color col;
         public bool active = true;
         public bool culled = false;
+        public bool doDistCulling = true;
         public string tag;
 
         public abstract int getWidth();
@@ -34,16 +35,23 @@ namespace nullEngine.Entity___Component
 
         public void DistCulling()
         {
-            if(active)
+            if (doDistCulling)
             {
-                if (Game.windowRect.IntersectsWith(getRect()))
+                if (active)
                 {
-                    culled = true;
+                    if (Game.windowRect.IntersectsWith(getRect()))
+                    {
+                        culled = true;
+                    }
+                    else
+                    {
+                        culled = false;
+                    }
                 }
-                else
-                {
-                    culled = false;
-                }
+            }
+            else
+            {
+                culled = true;
             }
         }
 

@@ -12,11 +12,12 @@ namespace nullEngine.Managers
     class EnemyManager
     {
         public static EnemyManager man;
+        public int enemiesLeft;
+        public int level;
 
         renderable[] enemies;
         renderable playerCharacter;
         List<int> activeEnemies;
-        int level;
 
         public EnemyManager(renderable[] enemies, renderable player)
         {
@@ -45,14 +46,23 @@ namespace nullEngine.Managers
 
         public bool checkEnemies()
         {
+            enemiesLeft = 0;
             for(int i = 0; i < activeEnemies.Count; i++)
             {
                 if(enemies[activeEnemies[i]].active)
                 {
-                    return true;
+                    enemiesLeft++;
                 }
             }
-            return false;
+
+            if(enemiesLeft > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static void resurrect(int arrayPos, renderable r)
@@ -89,13 +99,13 @@ namespace nullEngine.Managers
 
         public void cleanEnemies()
         {
-            //set all enemies to inactive
-            for(int i = 0; i < enemies.Length; i++)
+            //for all of the currently active enemies make sure they are inactive
+            for (int i = 0; i < activeEnemies.Count; i++)
             {
-                enemies[i].active = false;
+                enemies[activeEnemies[i]].active = false;
             }
 
-            //clear the active enemies list
+            //clear the active enemeies list
             activeEnemies.Clear();
         }
 
@@ -110,14 +120,7 @@ namespace nullEngine.Managers
                 count = enemies.Length;
             }
 
-            //for all of the currently active enemies make sure they are inactive
-            for(int i = 0; i < activeEnemies.Count; i++)
-            {
-                enemies[activeEnemies[i]].active = false;
-            }
-
-            //clear the active enemeies list
-            activeEnemies.Clear();
+            cleanEnemies();
 
             //for all of the enemies to spawn spawn an enemy from the pool
             for(int i = 0; i < count; i++)

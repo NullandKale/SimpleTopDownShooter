@@ -15,6 +15,9 @@ namespace nullEngine.Entity___Component
         //store the tiles for this text
         public Tile[] tiles;
 
+        //store the string in this Text
+        public string textString;
+
         //construct a text entity based off of a letter array
         public text(letter[] letters)
         {
@@ -32,6 +35,7 @@ namespace nullEngine.Entity___Component
 
             //generate the texture based off of the tile array
             tex = Managers.TextureManager.TextureFrom1DTileMap(tiles);
+            textString = "";
         }
 
         //construct a text entity based off of a string
@@ -52,6 +56,7 @@ namespace nullEngine.Entity___Component
 
             //generate the texture based off of the tile array
             tex = Managers.TextureManager.TextureFrom1DTileMap(tiles);
+            textString = s;
         }
 
         public override void update()
@@ -61,10 +66,32 @@ namespace nullEngine.Entity___Component
             {
                 //enqueue the render function
                 Game.renderQueue.Enqueue(render);
+
+                for(int i = 0; i < components.Count; i++)
+                {
+                    components[i].Run(this);
+                }
             }
 
             //do the distance culling 
             base.DistCulling();
+        }
+
+        public void ChangeText(string s)
+        {
+            if(s != textString)
+            {
+               letter[] letters = stringToLetter(s);
+                tiles = new Tile[letters.Length];
+                for (int i = 0; i < letters.Length; i++)
+                {
+                    tiles[i] = new Tile();
+                    tiles[i].TexID = (int)letters[i];
+                    tiles[i].tAtlas = Game.font;
+                }
+                Managers.TextureManager.GLDestoryTexture(tex.id);
+                tex = Managers.TextureManager.TextureFrom1DTileMap(tiles);
+            }
         }
 
         //this is the basic render command

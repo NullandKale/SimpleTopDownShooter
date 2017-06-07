@@ -24,6 +24,7 @@ namespace nullEngine
         public Button(string text, Texture2D background, Action onClick, MouseButton buttonToCheck, StateMachines.iState state)
         {
             this.background = new quad(background);
+            this.background.doDistCulling = false;
             t = new text(text);
             this.background.width = t.tex.width;
             this.background.height = t.tex.height;
@@ -37,6 +38,7 @@ namespace nullEngine
         public Button(string text, Texture2D background, String toEcho, MouseButton buttonToCheck, StateMachines.iState state)
         {
             this.background = new quad(background);
+            this.background.doDistCulling = false;
             t = new text(text);
             this.background.width = t.tex.width;
             this.background.height = t.tex.height;
@@ -72,6 +74,14 @@ namespace nullEngine
             t.pos.yPos = p.Y - (t.tex.height * transform.masterScale / 2);
             background.pos.xPos = p.X - (t.tex.width * transform.masterScale / 2) - 5;
             background.pos.yPos = p.Y - (t.tex.height * transform.masterScale / 2) - 5;
+        }
+
+        public void SetCenterPos(int x, int y)
+        {
+            t.pos.xPos = x - (t.tex.width * transform.masterScale / 2);
+            t.pos.yPos = y - (t.tex.height * transform.masterScale / 2);
+            background.pos.xPos = x - (t.tex.width * transform.masterScale / 2) - 5;
+            background.pos.yPos = y - (t.tex.height * transform.masterScale / 2) - 5;
         }
 
         public void SetActive(bool b)

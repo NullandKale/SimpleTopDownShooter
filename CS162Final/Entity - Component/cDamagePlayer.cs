@@ -24,13 +24,16 @@ namespace nullEngine.Entity___Component
 
         public void Run(renderable r)
         {
-            collidingWith = Managers.CollisionManager.man.CheckCollision(collider, 20);
-
-            for(int i = 0; i < collidingWith.Count; i++)
+            if(r.active)
             {
-                if(collidingWith[i].rRef == pc)
+                collidingWith = Managers.CollisionManager.man.CheckCollision(collider, 5);
+
+                for (int i = 0; i < collidingWith.Count; i++)
                 {
-                    pcHealth.damage(damage);
+                    if (collidingWith[i].rRef == pc)
+                    {
+                        pcHealth.damage(damage);
+                    }
                 }
             }
         }

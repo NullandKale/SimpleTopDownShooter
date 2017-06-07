@@ -65,6 +65,9 @@
     <Compile Include="Entity - Component\cHealth.cs" />
     <Compile Include="Entity - Component\cKeyboardMoveandCollide.cs" />
     <Compile Include="Entity - Component\cMouseFire.cs" />
+    <Compile Include="Entity - Component\cUIEnemiesLeft.cs" />
+    <Compile Include="Entity - Component\cUIHealth.cs" />
+    <Compile Include="Entity - Component\cUILevel.cs" />
     <Compile Include="Entity - Component\iComponent.cs" />
     <Compile Include="Entity - Component\iRenderable.cs" />
     <Compile Include="Entity - Component\KeyboardControl.cs" />

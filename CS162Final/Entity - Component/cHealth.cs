@@ -8,7 +8,7 @@ namespace nullEngine.Entity___Component
 {
     class cHealth : iComponent
     {
-        int currentHealth;
+        public int currentHealth;
         int maxHealth;
 
         renderable PC;
