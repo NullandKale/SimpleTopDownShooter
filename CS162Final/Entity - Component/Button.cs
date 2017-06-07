@@ -68,6 +68,14 @@ namespace nullEngine
             background.pos.yPos = p.Y;
         }
 
+        public void SetPos(int X, int Y)
+        {
+            t.pos.xPos = X;
+            t.pos.yPos = Y;
+            background.pos.xPos = X;
+            background.pos.yPos = Y;
+        }
+
         public void SetCenterPos(Point p)
         {
             t.pos.xPos = p.X - (t.tex.width * transform.masterScale / 2);

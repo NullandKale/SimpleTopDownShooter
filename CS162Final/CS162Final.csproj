@@ -82,7 +82,9 @@
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\SingletonException.cs" />
     <Compile Include="Managers\TextureManager.cs" />
+    <Compile Include="Managers\WorldManager.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="StateMachines\DebugState.cs" />
     <Compile Include="StateMachines\GameState.cs" />
     <Compile Include="StateMachines\GameStateManager.cs" />
     <Compile Include="StateMachines\iState.cs" />
@@ -112,12 +114,18 @@
     <Content Include="Content\grass.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\overworld.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\roguelikeCharBeard_transparent.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\roguelikeDungeon_transparent.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="DEBUG_MODE_ENABLED">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
