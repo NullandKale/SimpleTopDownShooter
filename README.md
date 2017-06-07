@@ -10,16 +10,16 @@ Before I continue I'd like to explain one thing I do in comments that can be con
   2. Implement melee attacks
     
 ## DONE
-  1. An understanding of the use of variables, conditionals, loops, and arrays | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/StateMachines/GameState.cs)
-  2. An understanding of code organization, decomposition (methods, classes, and source files) | [Link](https://github.com/NullandKale/SimpleTopDownShooter/tree/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381)
-  3. An understanding of various design (hierarchy) and testing (test methods and maybe a separate driver that runs tests on your other classes!) techniques | [Link](https://github.com/NullandKale/SimpleTopDownShooter/tree/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/StateMachines)
-  4. User IO, File IO, and Input validation | [User IO Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Managers/InputManager.cs) [File IO Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Managers/TextureManager.cs)
-  5. ~~Java~~ C# interfaces | [Interface Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Entity%20-%20Component/iRenderable.cs) [Implementation Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Entity%20-%20Component/quad.cs)
-  6. Recursion | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Managers/EnemyManager.cs)
-  7. Nested classes | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/StateMachines/GameState.cs)
-  8. GUI components, Event listeners, and their various uses | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/StateMachines/MenuState.cs)
-  9. Exceptions | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Managers/SingletonException.cs) 
-  10.Inheritance and Polymorphism | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/faf0e8a1c6bc2fa0356bfb86e66829f0e14e0381/CS162Final/Entity%20-%20Component/Button.cs)
+  1. An understanding of the use of variables, conditionals, loops, and arrays | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/StateMachines/GameState.cs)
+  2. An understanding of code organization, decomposition (methods, classes, and source files) | [Link](https://github.com/NullandKale/SimpleTopDownShooter/)
+  3. An understanding of various design (hierarchy) and testing (test methods and maybe a separate driver that runs tests on your other classes!) techniques | [Link](https://github.com/NullandKale/SimpleTopDownShooter/tree/master/CS162Final/StateMachines)
+  4. User IO, File IO, and Input validation | [User IO Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Managers/InputManager.cs) [File IO Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Managers/TextureManager.cs)
+  5. ~~Java~~ C# interfaces | [Interface Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Entity%20-%20Component/iComponent.cs) [Implementation Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Entity%20-%20Component/cCollider.cs)
+  6. Recursion | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Managers/EnemyManager.cs)
+  7. Nested classes | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/StateMachines/GameState.cs)
+  8. GUI components, Event listeners, and their various uses | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/StateMachines/MenuState.cs)
+  9. Exceptions | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Managers/SingletonException.cs) 
+  10.Inheritance and Polymorphism | [Link](https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Managers/ButtonManager.cs)
   11. Comment EVERYTHING
   12. Implement a health system for the player
   13. Implement a game over screen
