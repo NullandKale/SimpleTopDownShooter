@@ -34,7 +34,6 @@ namespace nullEngine
             containingState = state;
         }
 
-        //DEBUG CONSTRUCTOR
         public Button(string text, Texture2D background, String toEcho, MouseButton buttonToCheck, StateMachines.iState state)
         {
             this.background = new quad(background);
@@ -42,6 +41,28 @@ namespace nullEngine
             t = new text(text);
             this.background.width = t.tex.width;
             this.background.height = t.tex.height;
+
+            if (text == " ")
+            {
+                this.background.width = 16;
+                this.background.height = 16;
+            }
+
+            this.echo = toEcho;
+            onClick = Echo;
+            button = buttonToCheck;
+            Game.buttonMan.Add(this);
+            containingState = state;
+        }
+
+        public Button(int size, string text, Texture2D background, String toEcho, MouseButton buttonToCheck, StateMachines.iState state)
+        {
+            this.background = new quad(background);
+            this.background.doDistCulling = false;
+            t = new text(text);
+            this.background.width = size;
+            this.background.height = size;
+
             this.echo = toEcho;
             onClick = Echo;
             button = buttonToCheck;
@@ -58,6 +79,12 @@ namespace nullEngine
         private void Echo()
         {
             Console.WriteLine(echo);
+        }
+
+        public void SetScale(float scale)
+        {
+            t.pos.xScale = scale;
+            t.pos.yScale = scale;
         }
 
         public void SetPos(Point p)

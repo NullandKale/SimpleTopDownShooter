@@ -27,8 +27,8 @@ namespace nullEngine.StateMachines
 
             for (int i = 0; i < 189; i++)
             {
-                tiles[i] = new Button(" ", overworldTileAtlas.getTile(i), i.ToString(), OpenTK.Input.MouseButton.Left, this);
-                tiles[i].SetPos((i % 21) * 48, (i / 21) * 48);
+                tiles[i] = new Button(32, i.ToString(), overworldTileAtlas.getTile(i), i.ToString(), OpenTK.Input.MouseButton.Left, this);
+                tiles[i].SetPos(((i % 21) * 64) + i % 21 * 72, ((i / 21) * 64) + i / 21 * 72);
                 updaters.Add(tiles[i].update);
             }
         }
@@ -49,6 +49,8 @@ namespace nullEngine.StateMachines
             {
                 exitDebugState();
             }
+
+            MoveScreen();
         }
 
         public void exitDebugState()
@@ -56,6 +58,41 @@ namespace nullEngine.StateMachines
             Console.WriteLine("Exiting Debug State");
             GameStateManager.man.CurrentState = previousState;
             previousState.enter();
+        }
+
+        public void MoveScreen()
+        {
+            int halfWindowWidth = Game.windowRect.Width / 2;
+            int halfWindowHeight = Game.windowRect.Height / 2;
+
+            int moveX = 0;
+            int moveY = 0;
+            int speed = 5;
+
+            moveX = (Game.windowRect.Width / 2) + Game.windowRect.X;
+            moveY = (Game.windowRect.Height / 2) + Game.windowRect.Y;
+
+            if(Game.input.KeyHeld(OpenTK.Input.Key.A))
+            {
+                moveX -= speed;
+            }
+
+            if(Game.input.KeyHeld(OpenTK.Input.Key.D))
+            {
+                moveX += speed;
+            }
+
+            if(Game.input.KeyHeld(OpenTK.Input.Key.W))
+            {
+                moveY -= speed;
+            }
+
+            if (Game.input.KeyHeld(OpenTK.Input.Key.S))
+            {
+                moveY += speed;
+            }
+
+            Game.SetWindowCenter(moveX, moveY);
         }
     }
 }
