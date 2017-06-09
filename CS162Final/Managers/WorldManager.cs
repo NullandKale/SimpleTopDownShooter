@@ -25,10 +25,7 @@ namespace nullEngine.Managers
 
             overworldTileAtlas = new TextureAtlas("Content/overworld.png", 21, 9, 16, 16, 0);
         }
-    }
 
-    public enum WorldTile
-    {
 
     }
 }

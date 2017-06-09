@@ -14,6 +14,13 @@ namespace nullEngine
         public int TexID;
         public TextureAtlas tAtlas;
     }
+
+    public class worldTile
+    {
+        public WorldTexID TexID;
+        public TextureAtlas tAtlas;
+        public bool isContainer;
+    }
     
     //this is an enum for all of the letters supported by /Content/font.png
     public enum letter

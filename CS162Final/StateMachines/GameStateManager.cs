@@ -70,7 +70,7 @@ namespace nullEngine.StateMachines
 
             if(debugEnabled)
             {
-                if (Game.input.KeyFallingEdge(OpenTK.Input.Key.Tilde))
+                if (Game.input.KeyFallingEdge(OpenTK.Input.Key.Tilde) && CurrentState != dState)
                 {
                     dState.previousState = CurrentState;
                     CurrentState = dState;

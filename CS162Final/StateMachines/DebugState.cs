@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using nullEngine.Entity___Component;
+using System.Drawing;
 
 namespace nullEngine.StateMachines
 {
@@ -17,6 +18,9 @@ namespace nullEngine.StateMachines
         TextureAtlas overworldTileAtlas;
         Button[] tiles;
 
+        Point windowPos;
+        Point lastWorldPos;
+
         public DebugState()
         {
             updaters = new List<Action>();
@@ -27,8 +31,8 @@ namespace nullEngine.StateMachines
 
             for (int i = 0; i < 189; i++)
             {
-                tiles[i] = new Button(32, i.ToString(), overworldTileAtlas.getTile(i), i.ToString(), OpenTK.Input.MouseButton.Left, this);
-                tiles[i].SetPos(((i % 21) * 64) + i % 21 * 72, ((i / 21) * 64) + i / 21 * 72);
+                tiles[i] = new Button(32 ,i.ToString(), overworldTileAtlas.getTile(i), i.ToString(), OpenTK.Input.MouseButton.Left, this);
+                tiles[i].SetPos(((i % 21) * 64 + (i % 21 * 72)), ((i / 21) * 64) + (i / 21 * 72));
                 updaters.Add(tiles[i].update);
             }
         }
@@ -36,6 +40,11 @@ namespace nullEngine.StateMachines
         public void enter()
         {
             Console.WriteLine("Entered Debug State");
+            windowPos = new Point(Game.worldCenterX, Game.worldCenterY);
+            if(lastWorldPos != Point.Empty)
+            {
+                Game.SetWindowCenter(lastWorldPos.X, lastWorldPos.Y);
+            }
         }
 
         public void update()
@@ -56,6 +65,8 @@ namespace nullEngine.StateMachines
         public void exitDebugState()
         {
             Console.WriteLine("Exiting Debug State");
+            lastWorldPos = new Point(Game.worldCenterX, Game.worldCenterY);
+            Game.SetWindowCenter(windowPos.X, windowPos.Y);
             GameStateManager.man.CurrentState = previousState;
             previousState.enter();
         }

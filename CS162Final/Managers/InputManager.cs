@@ -51,18 +51,32 @@ namespace nullEngine
         //mouse state check functions
         public bool isClickedFalling(MouseButton b)
         {
-            return currentMouseState.IsButtonUp(b) && lastMouseState.IsButtonDown(b);
+            if(Game.window.Focused)
+            {
+                return currentMouseState.IsButtonUp(b) && lastMouseState.IsButtonDown(b);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool isClickedRising(MouseButton b)
         {
-            return currentMouseState.IsButtonDown(b) && lastMouseState.IsButtonUp(b);
+            if (Game.window.Focused)
+            {
+                return currentMouseState.IsButtonDown(b) && lastMouseState.IsButtonUp(b);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //keyboard state functions
         public bool KeyRisingEdge(Key k)
         {
-            if(!isKeystateValid())
+            if(!isKeystateValid() && !Game.window.Focused)
             {
                 return false;
             }
@@ -74,7 +88,7 @@ namespace nullEngine
 
         public bool KeyFallingEdge(Key k)
         {
-            if (!isKeystateValid())
+            if (!isKeystateValid() && !Game.window.Focused)
             {
                 return false;
             }
@@ -86,7 +100,7 @@ namespace nullEngine
 
         public bool KeyHeld(Key k)
         {
-            if (!isKeystateValid())
+            if (!isKeystateValid() && !Game.window.Focused)
             {
                 return false;
             }
