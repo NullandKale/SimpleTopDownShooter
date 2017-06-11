@@ -21,6 +21,7 @@ namespace nullEngine.StateMachines
         //game manager singletons
         Managers.CollisionManager col;
         Managers.EnemyManager eMan;
+        Managers.WorldManager wMan;
 
         //general game entities and components
         public quad background;
@@ -41,10 +42,6 @@ namespace nullEngine.StateMachines
 
         public GameState()
         {
-            //set worldSize to 1000 x 1000
-            Game.worldMaxX = 1800;
-            Game.worldMaxY = 1000;
-
             //get a reference to pause state
             pState = GameStateManager.man.pState;
             mState = GameStateManager.man.mState;
@@ -52,11 +49,13 @@ namespace nullEngine.StateMachines
             //initialize list of entity updaters and the collision manager singleton
             updaters = new List<Action>();
             col = new Managers.CollisionManager(100);
+            int seed = Game.rng.Next();
+            wMan = new Managers.WorldManager(seed, 100, 10d, 64, col);
+            Game.worldMaxX = wMan.worldMaxX;
+            Game.worldMaxY = wMan.worldMaxY;
 
             //initialize background entity
-            background = new quad("Content/grass.png");
-            background.pos.xScale = 1f / 2f;
-            background.pos.yScale = 1f / 2f;
+            background = new quad(Managers.WorldManager.worldTex);
             updaters.Add(background.update);
 
             //initialize player character entity

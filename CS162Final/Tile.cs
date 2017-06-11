@@ -9,16 +9,16 @@ using System.Drawing;
 namespace nullEngine
 {
     //this is a struct for each tile
-    public class Tile
+    public struct Tile
     {
         public int TexID;
         public TextureAtlas tAtlas;
     }
 
-    public class worldTile
+    public struct worldTile
     {
-        public WorldTexID TexID;
-        public TextureAtlas tAtlas;
+        public Tile graphics;
+        public bool isCollideable;
         public bool isContainer;
     }
     

@@ -103,6 +103,7 @@
     <Compile Include="Managers\SingletonException.cs" />
     <Compile Include="Managers\TextureManager.cs" />
     <Compile Include="Managers\WorldManager.cs" />
+    <Compile Include="OpenSimplexNoise.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="StateMachines\DebugState.cs" />
     <Compile Include="StateMachines\GameState.cs" />
@@ -130,6 +131,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\font.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\grad.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\grass.png">

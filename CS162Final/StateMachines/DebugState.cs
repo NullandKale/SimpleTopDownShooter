@@ -12,14 +12,14 @@ namespace nullEngine.StateMachines
     class DebugState : iState
     {
         public iState previousState;
-
         public List<Action> updaters;
 
         TextureAtlas overworldTileAtlas;
-        Button[] tiles;
 
         Point windowPos;
         Point lastWorldPos;
+
+        quad testWorld;
 
         public DebugState()
         {
@@ -27,14 +27,8 @@ namespace nullEngine.StateMachines
 
             overworldTileAtlas = new TextureAtlas("Content/overworld.png", 21, 9, 16, 16, 0);
 
-            tiles = new Button[189];
-
-            for (int i = 0; i < 189; i++)
-            {
-                tiles[i] = new Button(32 ,i.ToString(), overworldTileAtlas.getTile(i), i.ToString(), OpenTK.Input.MouseButton.Left, this);
-                tiles[i].SetPos(((i % 21) * 64 + (i % 21 * 72)), ((i / 21) * 64) + (i / 21 * 72));
-                updaters.Add(tiles[i].update);
-            }
+            testWorld = new quad(Managers.WorldManager.worldTex);
+            updaters.Add(testWorld.update);
         }
 
         public void enter()
@@ -57,6 +51,12 @@ namespace nullEngine.StateMachines
             if(Game.input.KeyFallingEdge(OpenTK.Input.Key.Escape))
             {
                 exitDebugState();
+            }
+
+            if(Game.input.isClickedFalling(OpenTK.Input.MouseButton.Left))
+            {
+                Point mPos = Game.ScreenToWorldSpace(Game.input.mousePos);
+                Console.WriteLine("MousePos: [" + mPos.X + "," + mPos.Y + "]");
             }
 
             MoveScreen();

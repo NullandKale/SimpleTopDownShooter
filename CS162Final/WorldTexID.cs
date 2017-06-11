@@ -74,9 +74,9 @@ namespace nullEngine
 
         sand0 = 27,
         sand1 = 108,
-        sand3 = 109,
-        sand4 = 85,
-        sand5 = 148,
+        sand2 = 109,
+        sand3 = 85,
+        sand4 = 148,
 
         water0 = 70,
         water1 = 171,
