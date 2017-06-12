@@ -112,7 +112,7 @@ namespace nullEngine.Managers
         public void respawn(int level)
         {
             //get the number of enemies to spawn
-            int count = getEnemyCount(level);
+            int count = getEnemyCount(level) * 10;
 
             //if there are not enough enemies in the pool set the number of enemies to spawn to the number of enemies in the pool
             if(count > enemies.Length)

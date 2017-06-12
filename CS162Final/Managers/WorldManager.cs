@@ -16,8 +16,16 @@ namespace nullEngine.Managers
         {
             get
             {
-                Console.WriteLine("Generating World Texture");
-                return TextureManager.TextureFrom2DTileMap(man.GenerateWorld());
+                if(man.worldTexCache == null)
+                {
+                    Console.WriteLine("Generating World Texture");
+                    man.worldTexCache = TextureManager.TextureFrom2DTileMap(man.GenerateWorld());
+                    return man.worldTexCache;
+                }
+                else
+                {
+                    return man.worldTexCache;
+                }
             }
         }
 
@@ -40,6 +48,8 @@ namespace nullEngine.Managers
                 return worldSizeY * tileSize;
             }
         }
+
+        private Texture2D worldTexCache;
 
         OpenSimplexNoise noise;
         int worldSizeX;
