@@ -27,8 +27,8 @@ namespace nullEngine
 
         private Matrix4 projMatrix;
 
-        private static int worldx = 0;
-        private static int worldy = 0;
+        public static int worldx = 0;
+        public static int worldy = 0;
         public static int worldMaxX;
         public static int worldMaxY;
 
@@ -155,6 +155,13 @@ namespace nullEngine
 
         //set window center to said world point
         public static void SetWindowCenter(int x, int y)
+        {
+            worldx = (window.Width / 2) + x;
+            worldy = (window.Height / 2) + y;
+            windowRect = new Rectangle(worldx, worldy, window.Width, window.Height);
+        }
+
+        public static void SetWindowCenterOffset(int x, int y)
         {
             worldx = x - (window.Width / 2);
             worldy = y - (window.Height / 2);

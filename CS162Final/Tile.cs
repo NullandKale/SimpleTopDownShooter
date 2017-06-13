@@ -15,6 +15,7 @@ namespace nullEngine
         public TextureAtlas tAtlas;
     }
 
+    [Serializable]
     public struct worldTile
     {
         public Tile graphics;

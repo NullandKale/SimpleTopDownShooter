@@ -27,8 +27,8 @@ namespace nullEngine.StateMachines
 
             overworldTileAtlas = new TextureAtlas("Content/overworld.png", 21, 9, 16, 16, 0);
 
-            testWorld = new quad(Managers.WorldManager.worldTex);
-            updaters.Add(testWorld.update);
+            //testWorld = new quad(Managers.WorldManager.worldTex);
+            //updaters.Add(testWorld.update);
         }
 
         public void enter()

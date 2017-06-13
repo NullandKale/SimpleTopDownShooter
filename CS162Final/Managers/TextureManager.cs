@@ -193,6 +193,76 @@ namespace nullEngine.Managers
 
         }
 
+        public static Bitmap BitmapFrom2DTileMap(worldTile[,] tiles)
+        {
+            Console.WriteLine("Generating 2D tileMap bitmap");
+            int tileSizeX = tiles[0, 0].graphics.tAtlas.tilePixelWidth;
+            int tileSizeY = tiles[0, 0].graphics.tAtlas.tilePixelHeight;
+            int xTileCount = tiles[0, 0].graphics.tAtlas.tileWidth;
+            int yTileCount = tiles[0, 0].graphics.tAtlas.tileHeight;
+            String filePath = tiles[0, 0].graphics.tAtlas.path;
+
+            Console.WriteLine("Loading Tile Atlas");
+            Bitmap atlas = new Bitmap(filePath);
+
+            Console.WriteLine("Generating final bitmap");
+            Bitmap final = new Bitmap(tileSizeX * tiles.GetLength(0) + 1, tileSizeY * tiles.GetLength(1) + 1);
+
+            Console.WriteLine("Setting final bitmap pixels");
+            for (int x = 0; x < tiles.GetLength(0); x++)
+            {
+                for (int y = 0; y < tiles.GetLength(1); y++)
+                {
+                    int tilePosY = tiles[x, y].graphics.TexID / xTileCount;
+                    int tilePosX = tiles[x, y].graphics.TexID % xTileCount;
+
+                    for (int k = 0; k < tileSizeY; k++)
+                    {
+                        for (int j = 0; j < tileSizeX; j++)
+                        {
+                            int xCord = (x * tileSizeX) + j;
+                            int yCord = (y * tileSizeY) + k;
+
+                            int tileCordX = ((tilePosX) * tileSizeX) + j;
+                            int tileCordY = ((tilePosY) * tileSizeY) + k;
+
+                            Color c = atlas.GetPixel(tileCordX, tileCordY);
+
+                            final.SetPixel(xCord, yCord, c);
+                        }
+                    }
+                }
+            }
+            return final;
+        }
+
+        public static Texture2D TextureFromBitmap(Bitmap final)
+        {
+            int id = GL.GenTexture();
+
+            Console.WriteLine("Locking bitmap and sending to graphics memory");
+            BitmapData bmpData = final.LockBits(new Rectangle(0, 0, final.Width, final.Height),
+                    ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            GL.BindTexture(TextureTarget.Texture2D, id);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0,
+                PixelInternalFormat.Rgba, final.Width, final.Height, 0,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                PixelType.UnsignedByte, bmpData.Scan0);
+
+            final.UnlockBits(bmpData);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+                (int)TextureMinFilter.Nearest);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+                (int)TextureMagFilter.Nearest);
+
+            return new Texture2D(id, final.Width, final.Height);
+        }
+
+
         public static Texture2D TextureFrom2DTileMap(worldTile[,] tiles)
         {
             Console.WriteLine("Generating 2D tileMap Texture");

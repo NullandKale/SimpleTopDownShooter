@@ -12,10 +12,12 @@ namespace nullEngine.Entity___Component
     class cKeyboardMoveandCollide : KeyboardControl
     {
         private cCollider collider;
+        private Managers.WorldManager wMan;
 
         public cKeyboardMoveandCollide(int speed, cCollider c) : base(speed)
         {
             collider = c;
+            wMan = Managers.WorldManager.man;
         }
 
         public override void Run(renderable r)
@@ -51,7 +53,38 @@ namespace nullEngine.Entity___Component
                 if (moved)
                 {
                     Point p = Managers.CollisionManager.WillItCollide(collider, xMove, yMove);
-                    r.setRelativePos(p);
+
+                    p.X += (int)r.pos.xPos;
+                    p.Y += (int)r.pos.yPos;
+
+                    int worldMoveX = 0;
+                    int worldMoveY = 0;
+
+                    if (p.X >= wMan.worldMaxX)
+                    {
+                        p.X = 100;
+                        worldMoveX++;
+                    }
+                    if (p.X <= 0)
+                    {
+                        p.X = wMan.worldMaxX - 100;
+                        worldMoveX--;
+                    }
+
+                    if (p.Y >= wMan.worldMaxY)
+                    {
+                        p.Y = 100;
+                        worldMoveY++;
+                    }
+                    if (p.Y <= 0)
+                    {
+                        p.Y = wMan.worldMaxY - 100;
+                        worldMoveY--;
+                    }
+
+                    r.setPos(p);
+
+                    wMan.ChangeCurrentChunk(worldMoveX, worldMoveY);
                 }
             }
         }

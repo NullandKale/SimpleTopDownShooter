@@ -91,6 +91,15 @@ namespace nullEngine.StateMachines
 
         public void update()
         {
+            if(Game.worldx != 0)
+            {
+                Game.worldx = 0;
+            }
+            if (Game.worldy != 0)
+            {
+                Game.worldy = 0;
+            }
+
             //check if the states are valid
             checkStates();
 

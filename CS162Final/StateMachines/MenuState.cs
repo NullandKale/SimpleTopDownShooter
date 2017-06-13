@@ -61,6 +61,7 @@ namespace nullEngine.StateMachines
         public void enter()
         {
             Console.WriteLine("Entered MenuState");
+            Game.SetWindowCenter(-Game.window.Width / 2, -Game.window.Height / 2);
         }
 
         public void update()

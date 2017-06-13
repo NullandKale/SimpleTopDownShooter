@@ -45,7 +45,7 @@ namespace nullEngine.Entity___Component
                 moveY = Game.worldRect.Height - halfWindowHeight;
             }
 
-            Game.SetWindowCenter(moveX, moveY);
+            Game.SetWindowCenterOffset(moveX, moveY);
         }
 
     }

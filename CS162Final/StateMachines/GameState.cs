@@ -40,6 +40,8 @@ namespace nullEngine.StateMachines
         public Button uiLevel;
         public Button uiEnemiesLeft;
 
+        private Point LastWorldPos;
+
         public GameState()
         {
             //get a reference to pause state
@@ -49,13 +51,15 @@ namespace nullEngine.StateMachines
             //initialize list of entity updaters and the collision manager singleton
             updaters = new List<Action>();
             col = new Managers.CollisionManager(100);
-            int seed = Game.rng.Next();
-            wMan = new Managers.WorldManager(seed, 100, 10d, 64, col);
+            int seed = 5; //Game.rng.Next();
+            wMan = new Managers.WorldManager(seed, 10, 100, 10d, 64, col, new Point(0,0));
             Game.worldMaxX = wMan.worldMaxX;
             Game.worldMaxY = wMan.worldMaxY;
+            LastWorldPos = new Point(Game.worldCenterX, Game.worldCenterY);
 
             //initialize background entity
             background = new quad(Managers.WorldManager.worldTex);
+            background.AddComponent(new cBackgroundManger());
             updaters.Add(background.update);
 
             //initialize player character entity
@@ -127,6 +131,7 @@ namespace nullEngine.StateMachines
         public void enter()
         {
             Console.WriteLine("Entered GameState");
+            Game.SetWindowCenter(LastWorldPos.X, LastWorldPos.Y);
         }
 
         public void update()
@@ -166,6 +171,7 @@ namespace nullEngine.StateMachines
         {
             Console.WriteLine("Changing to PauseState");
             GameStateManager.man.CurrentState = GameStateManager.man.pState;
+            LastWorldPos = new Point(Game.worldCenterX, Game.worldCenterY);
             pState.enter();
         }
 
@@ -180,9 +186,9 @@ namespace nullEngine.StateMachines
 
         public void Gameover()
         {
-            gameover.SetCenterPos(Game.windowRect.Right / 2, Game.windowRect.Bottom / 2);
+            gameover.SetCenterPos(Game.windowRect.Width / 2, Game.windowRect.Height / 2);
             gameover.SetActive(true);
-            Game.SetWindowCenter(Game.window.Width / 2, Game.window.Height / 2);
+            Game.SetWindowCenter(-Game.window.Width / 2, -Game.window.Height / 2);
             Managers.EnemyManager.man.Reset();
         }
 
@@ -193,6 +199,7 @@ namespace nullEngine.StateMachines
             playerHealth.resurrect();
             Console.WriteLine("Changing to MenuState");
             GameStateManager.man.CurrentState = GameStateManager.man.mState;
+            LastWorldPos = new Point(0,0);
             mState.enter();
         }
     }

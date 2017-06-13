@@ -234,7 +234,7 @@ namespace nullEngine.Managers
             Point cKey = getKey(rect);
 
             //if the rect is outside the world immediately return true 
-            if (CheckForLeaveWorld(rect))
+            if (c.rRef.tag != "Player" && CheckForLeaveWorld(rect))
             {
                 return true;
             }
