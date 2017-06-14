@@ -109,13 +109,27 @@ namespace nullEngine.Managers
             //if the rect that corrisponds to the xmove collides set the xmove to 0
             if(collideX)
             {
-                p.X = 0;
+                if(xMove < 0)
+                {
+                    p.X = 1;
+                }
+                else
+                {
+                    p.X = -1;
+                }
             }
 
             //do the same for the y move
             if(collideY)
             {
-                p.Y = 0;
+                if (yMove < 0)
+                {
+                    p.Y = 1;
+                }
+                else
+                {
+                    p.Y = -1;
+                }
             }
 
             //return the adjusted movement

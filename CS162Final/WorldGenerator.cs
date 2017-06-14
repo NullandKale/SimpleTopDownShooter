@@ -12,65 +12,52 @@ namespace nullEngine.WorldGen
 {
     class WorldGenerator
     {
-        public WorldData
-        private double scale;
+        public WorldData wData;
         private int tileSize;
-        private int worldSizeX;
-        private int worldSizeY;
-        private int chunkSizeX;
-        private int chunkSizeY;
+        private double scale;
         private OpenSimplexNoise noise;
 
         private CollisionManager cMan;
         private List<cCollider> colliders;
 
-        public TextureAtlas overworldTileAtlas;
-
         public WorldGenerator(int seed, int worldSize, int chunkSize, double scale, int tileSize, CollisionManager collisionManager)
         {
             cMan = collisionManager;
-
-            overworldTileAtlas = new TextureAtlas("Content/overworld.png", 21, 9, 16, 16, 0);
             noise = new OpenSimplexNoise(seed);
-
-            worldSizeX = worldSize;
-            worldSizeY = worldSize;
-            chunkSizeX = chunkSize;
-            chunkSizeY = chunkSize;
-
-            this.tileSize = tileSize;
             this.scale = scale;
+            this.tileSize = tileSize;
+
+            wData = new WorldData(seed, worldSize, chunkSize, "Content/overworld.png");
         }
 
         public Chunk GenerateWorld(Point tempChunkPos)
         {
-            Chunk tempChunk = new Chunk(chunkSizeX, tempChunkPos.X, tempChunkPos.Y);
+            Chunk tempChunk = new Chunk(wData.chunkSize, tempChunkPos.X, tempChunkPos.Y);
 
-            double[,] height = new double[chunkSizeX, chunkSizeY];
+            double[,] height = new double[wData.chunkSize, wData.chunkSize];
 
             double maxHeight = 0;
 
-            for (int x = 0; x < chunkSizeX; x++)
+            for (int x = 0; x < wData.chunkSize; x++)
             {
-                for (int y = 0; y < chunkSizeY; y++)
+                for (int y = 0; y < wData.chunkSize; y++)
                 {
-                    double xLoc = (((double)x / (double)chunkSizeX) + (tempChunkPos.X * chunkSizeX)) * scale;
-                    double yLoc = (((double)y / (double)chunkSizeY) + (tempChunkPos.Y * chunkSizeY)) * scale;
+                    double xLoc = (((double)x / (double)wData.chunkSize) + (tempChunkPos.X * wData.chunkSize)) * scale;
+                    double yLoc = (((double)y / (double)wData.chunkSize) + (tempChunkPos.Y * wData.chunkSize)) * scale;
                     height[x, y] = noise.Evaluate(xLoc, yLoc);
 
                     if (maxHeight < height[x, y])
                     {
                         maxHeight = height[x, y];
                     }
-
                 }
             }
 
-            for (int x = 0; x < chunkSizeX; x++)
+            for (int x = 0; x < wData.chunkSize; x++)
             {
-                for (int y = 0; y < chunkSizeY; y++)
+                for (int y = 0; y < wData.chunkSize; y++)
                 {
-                    tempChunk.backgroundTiles[x, y].graphics.tAtlas = overworldTileAtlas;
+                    tempChunk.backgroundTiles[x, y].graphics.tAtlas = wData.tAtlas;
 
                     double region0 = 0.25 * maxHeight;
                     double region1 = 0.50 * maxHeight;
@@ -164,9 +151,9 @@ namespace nullEngine.WorldGen
             }
 
 
-            for (int x = 0; x < chunkSizeX; x++)
+            for (int x = 0; x < wData.chunkSize; x++)
             {
-                for (int y = 0; y < chunkSizeY; y++)
+                for (int y = 0; y < wData.chunkSize; y++)
                 {
                     if (tempChunk[x, y].isCollideable)
                     {
@@ -197,7 +184,7 @@ namespace nullEngine.WorldGen
 
         private void GenerateWorldData()
         {
-
+            
         }
 
         private void GenerateVillageChunkLocations()

@@ -11,23 +11,21 @@ namespace nullEngine
     [Serializable]
     public class WorldData
     {
-        int seed;
-        int ChunkSize;
-        int WorldSize;
-        VillageData[] Villaga;
-        string TAtlasLoc;
-
+        public int seed;
+        public int chunkSize;
+        public int worldSize;
+        public List<VillageData> Villages;
         public TextureAtlas tAtlas
         {
             get
             {
-                if(tAtlasCache.notEmpty)
+                if (tAtlasCache == null)
                 {
                     return tAtlasCache;
                 }
                 else
                 {
-                    tAtlasCache = new TextureAtlas("Content/overworld.png", 21, 9, 16, 16, 0);
+                    tAtlasCache = new TextureAtlas(tAtlasLoc, 21, 9, 16, 16, 0);
                     return tAtlasCache;
                 }
             }
@@ -36,7 +34,18 @@ namespace nullEngine
         [NonSerialized]
         private TextureAtlas tAtlasCache;
 
+        private string tAtlasLoc;
 
+        public WorldData(int seed, int worldSize, int chunkSize, string TatlasLoc)
+        {
+            this.seed = seed;
+            this.worldSize = worldSize;
+            this.chunkSize = chunkSize;
+            this.tAtlasLoc = TatlasLoc;
+
+            Villages = new List<VillageData>();
+            tAtlasCache = new TextureAtlas(tAtlasLoc, 21, 9, 16, 16, 0);
+        }
     }
 
     [Serializable]

@@ -205,7 +205,7 @@ namespace nullEngine.Managers
             {
                 c = (Chunk)formatter.Deserialize(stream);
                 stream.Close();
-                c.AfterDiskLoad(wGen.overworldTileAtlas);
+                c.AfterDiskLoad(wGen.wData.tAtlas);
             }
 
             return c;
@@ -225,6 +225,7 @@ namespace nullEngine.Managers
                 else
                 {
                     stream.Close();
+                    Console.WriteLine("Chunk on disk");
                     return true;
                 }
             }
