@@ -117,6 +117,7 @@
     <Compile Include="Texture2D.cs" />
     <Compile Include="TextureAtlas.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="WorldData.cs" />
     <Compile Include="WorldGenerator.cs" />
     <Compile Include="WorldTexID.cs" />
   </ItemGroup>

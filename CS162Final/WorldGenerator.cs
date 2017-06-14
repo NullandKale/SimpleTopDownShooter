@@ -12,6 +12,7 @@ namespace nullEngine.WorldGen
 {
     class WorldGenerator
     {
+        public WorldData
         private double scale;
         private int tileSize;
         private int worldSizeX;
@@ -23,7 +24,7 @@ namespace nullEngine.WorldGen
         private CollisionManager cMan;
         private List<cCollider> colliders;
 
-        private TextureAtlas overworldTileAtlas;
+        public TextureAtlas overworldTileAtlas;
 
         public WorldGenerator(int seed, int worldSize, int chunkSize, double scale, int tileSize, CollisionManager collisionManager)
         {
@@ -187,6 +188,22 @@ namespace nullEngine.WorldGen
             X = X * tileSize;
             Y = Y * tileSize;
             return new Rectangle(X, Y, tileSize, tileSize);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////
+        //                  World Generation Functions Galore                    //
+        //                         HERE BE DRAGONS                               //
+        ///////////////////////////////////////////////////////////////////////////
+
+        private void GenerateWorldData()
+        {
+
+        }
+
+        private void GenerateVillageChunkLocations()
+        {
+            int numberVillages = 5;
+            int minChunkDist = 2;
         }
     }
 }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 using System.Drawing;
 using nullEngine.Entity___Component;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace nullEngine.Managers
 {
@@ -19,6 +22,8 @@ namespace nullEngine.Managers
                 return man.currentChunk.getBackgroundTexture();
             }
         }
+
+        public string worldFileLoc = "Content/World/";
 
         public Point currentChunkPos;
         public Chunk currentChunk;
@@ -71,6 +76,7 @@ namespace nullEngine.Managers
             this.scale = scale;
 
             wGen = new WorldGen.WorldGenerator(seed, worldSize, chunkSize, scale, tileSize, collisionManager);
+            worldFileLoc += seed.ToString() + "/";
             worldCache = new Dictionary<Point, Chunk>();
             LoadChunk();
         }
@@ -83,8 +89,17 @@ namespace nullEngine.Managers
             }
             else
             {
-                currentChunk = wGen.GenerateWorld(currentChunkPos);
-                worldCache.Add(currentChunk.key, currentChunk);
+                if (ChunkOnDisk(currentChunkPos))
+                {
+                    currentChunk = LoadChunkFromDisk(currentChunkPos);
+                    worldCache.Add(currentChunk.key, currentChunk);
+                }
+                else
+                {
+                    currentChunk = wGen.GenerateWorld(currentChunkPos);
+                    worldCache.Add(currentChunk.key, currentChunk);
+                    SaveChunkToDisk(currentChunk);
+                }
             }
 
             wGen.GenerateColliders(currentChunk.backgroundTiles);
@@ -146,6 +161,77 @@ namespace nullEngine.Managers
                 currentChunkPos.Y += Y;
             }
             LoadChunk();
+        }
+
+        public string GenChunkFileName(Point key)
+        {
+            return worldFileLoc + key.X + "-" + key.Y + ".wor";
+        }
+
+        public void SaveChunkToDisk(Chunk c)
+        {
+            if(!ChunkOnDisk(c.key))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                string chunkFile = GenChunkFileName(c.key);
+                GenFileStructure();
+                Stream stream = new FileStream(chunkFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                formatter.Serialize(stream, c);
+                stream.Close();
+            }
+        }
+
+        public void GenFileStructure()
+        {
+            Directory.CreateDirectory(worldFileLoc);
+        }
+
+        public Chunk LoadChunkFromDisk(Point loc)
+        {
+            Console.WriteLine("Loading Chunk @ [" + loc.X + "," + loc.Y + "]");
+            string chunkFile = GenChunkFileName(loc);
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream(chunkFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Chunk c;
+
+            if (stream.Length == 0)
+            {
+                Console.WriteLine("Error in chunk saved to disk. Regnerating Chunk and Saving to Disk");
+                stream.Close();
+                c = wGen.GenerateWorld(loc);
+                SaveChunkToDisk(c);
+            }
+            else
+            {
+                c = (Chunk)formatter.Deserialize(stream);
+                stream.Close();
+                c.AfterDiskLoad(wGen.overworldTileAtlas);
+            }
+
+            return c;
+        }
+
+        public bool ChunkOnDisk(Point loc)
+        {
+            string chunkFile = GenChunkFileName(loc);
+            if(File.Exists(chunkFile))
+            {
+                Stream stream = new FileStream(chunkFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+                if (stream.Length == 0)
+                {
+                    stream.Close();
+                    return false;
+                }
+                else
+                {
+                    stream.Close();
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

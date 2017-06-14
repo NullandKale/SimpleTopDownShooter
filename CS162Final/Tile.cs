@@ -9,9 +9,11 @@ using System.Drawing;
 namespace nullEngine
 {
     //this is a struct for each tile
+    [Serializable]
     public struct Tile
     {
         public int TexID;
+        [NonSerialized]
         public TextureAtlas tAtlas;
     }
 

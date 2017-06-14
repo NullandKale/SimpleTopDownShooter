@@ -24,6 +24,7 @@ namespace nullEngine
         //texture info
         public string path;
         private Texture2D baseTexture;
+        public bool notEmpty;
 
         public TextureAtlas(string TexturePath, int xTileCount, int yTileCount, int pixelsPerTileX, int pixelsPerTileY, int padding)
         {
@@ -42,6 +43,8 @@ namespace nullEngine
             tileWidth = xTileCount;
             tileHeight = yTileCount;
             _padding = padding;
+
+            notEmpty = true;
         }
 
         //get a textuee for the tile

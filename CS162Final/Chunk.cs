@@ -16,10 +16,13 @@ namespace nullEngine
         public worldTile[,] foregroundTiles;
         public Point key;
 
-        private Texture2D backgroundTexture;
         private Bitmap backgroundBitmap;
         private bool textureGenerated;
-        int size;
+        private bool textureOld;
+        private int size;
+
+        [NonSerialized]
+        private Texture2D backgroundTexture;
 
         public Chunk(int xSize, int xCord, int yCord)
         {
@@ -28,6 +31,7 @@ namespace nullEngine
             foregroundTiles = new worldTile[xSize, xSize];
             size = xSize;
             textureGenerated = false;
+            textureOld = false;
         }
 
         public Texture2D getBackgroundTexture()
@@ -38,10 +42,31 @@ namespace nullEngine
             }
             else
             {
-                backgroundBitmap = Managers.TextureManager.BitmapFrom2DTileMap(backgroundTiles);
-                backgroundTexture = Managers.TextureManager.TextureFromBitmap(backgroundBitmap);
-                textureGenerated = true;
-                return backgroundTexture;
+                if(backgroundBitmap == null || textureOld)
+                {
+                    backgroundBitmap = Managers.TextureManager.BitmapFrom2DTileMap(backgroundTiles);
+                    backgroundTexture = Managers.TextureManager.TextureFromBitmap(backgroundBitmap);
+                    textureGenerated = true;
+                    return backgroundTexture;
+                }
+                else
+                {
+                    backgroundTexture = Managers.TextureManager.TextureFromBitmap(backgroundBitmap);
+                    textureGenerated = true;
+                    return backgroundTexture;
+                }
+            }
+        }
+
+        public void AfterDiskLoad(TextureAtlas backgroundtAtlas)
+        {
+            for(int x = 0; x < size; x++)
+            {
+                for (int y = 0; y < size; y++)
+                {
+                    backgroundTiles[x, y].graphics.tAtlas = backgroundtAtlas;
+                    foregroundTiles[x, y].graphics.tAtlas = backgroundtAtlas;
+                }
             }
         }
     }
