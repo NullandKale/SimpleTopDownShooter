@@ -16,6 +16,9 @@ namespace nullEngine
         public worldTile[,] foregroundTiles;
         public Point key;
 
+        public bool hasDungeon;
+        public DungeonData dungeon;
+
         private Bitmap backgroundBitmap;
         private bool textureGenerated;
         private bool textureOld;

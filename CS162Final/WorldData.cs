@@ -19,7 +19,7 @@ namespace nullEngine
         {
             get
             {
-                if (tAtlasCache == null)
+                if (tAtlasCache != null)
                 {
                     return tAtlasCache;
                 }
@@ -51,7 +51,20 @@ namespace nullEngine
     [Serializable]
     public class VillageData
     {
-        Point Loc;
-        Point ConnectedVillageLoc;
+        public Point Loc;
+        public Point ConnectedVillageLoc;
+        public List<Point> roadChunks;
+    }
+
+    [Serializable]
+    public struct DungeonData
+    {
+        public Point DoorChunkLoc;
+        public Point DoorLoc;
+        public int sizeX;
+        public int sizeY;
+
+        public worldTile[,] backgroundTiles;
+        public worldTile[,] foregroundTiles;
     }
 }

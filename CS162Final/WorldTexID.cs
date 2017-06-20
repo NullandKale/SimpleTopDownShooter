@@ -42,6 +42,11 @@ namespace nullEngine
         beachToGrassBottomLeft = 87,
         beachToGrassBottomRight = 88,
 
+        beachInteriorTopLeft = 68,
+        beachInteriorTopRight = 69,
+        beachInteriorBottomLeft = 89,
+        beachInteriorBottomRight = 90,
+
         beachTopLeft = 5,
         beachTopMid = 6,
         beachTopRight = 7,
