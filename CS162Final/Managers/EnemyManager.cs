@@ -15,11 +15,12 @@ namespace nullEngine.Managers
         public int enemiesLeft;
         public int level;
 
-        renderable[] enemies;
+        public quad[] enemies;
+        public List<Action> updaters;
         renderable playerCharacter;
         List<int> activeEnemies;
 
-        public EnemyManager(renderable[] enemies, renderable player)
+        public EnemyManager(renderable player, cHealth playerHealth, int enemyCount)
         {
             if(man == null)
             {
@@ -29,10 +30,23 @@ namespace nullEngine.Managers
             {
                 throw new SingletonException(this);
             }
-            this.enemies = enemies;
+
+            updaters = new List<Action>();
             activeEnemies = new List<int>();
             playerCharacter = player;
             level = 0;
+            //initialize eneimes
+            enemies = new quad[enemyCount];
+            for (int j = 0; j < enemies.Length; j++)
+            {
+                enemies[j] = new quad("Content/roguelikeCharBeard_transparent.png");
+                cCollider badguyCollider = new cCollider(enemies[j]);
+                enemies[j].AddComponent(new cDamagePlayer(playerCharacter, playerHealth, 1, badguyCollider));
+                enemies[j].AddComponent(badguyCollider);
+                enemies[j].AddComponent(new cEnemyAI(3, badguyCollider, playerCharacter, 300));
+                enemies[j].active = false;
+                updaters.Add(enemies[j].update);
+            }
         }
 
         public void update()
@@ -41,6 +55,11 @@ namespace nullEngine.Managers
             {
                 level++;
                 respawn(level);
+            }
+
+            for(int i = 0; i < updaters.Count; i++)
+            {
+                updaters[i].Invoke();
             }
         }
 

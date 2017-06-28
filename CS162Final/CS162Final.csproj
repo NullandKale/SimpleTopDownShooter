@@ -87,6 +87,7 @@
     <Compile Include="Entity - Component\cHealth.cs" />
     <Compile Include="Entity - Component\cKeyboardMoveandCollide.cs" />
     <Compile Include="Entity - Component\cMouseFire.cs" />
+    <Compile Include="Entity - Component\cRangedWeapon.cs" />
     <Compile Include="Entity - Component\cUIEnemiesLeft.cs" />
     <Compile Include="Entity - Component\cUIHealth.cs" />
     <Compile Include="Entity - Component\cUILevel.cs" />
