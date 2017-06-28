@@ -22,6 +22,7 @@ namespace nullEngine
         public static Texture2D buttonBackground;
         public static long frameTime;
         public static Random rng;
+        public static bool doNotLoad = true;
 
         public StateMachines.GameStateManager gStateManager;
 

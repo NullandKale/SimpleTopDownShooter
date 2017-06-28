@@ -39,6 +39,7 @@ namespace nullEngine.StateMachines
         public Button uiHealth;
         public Button uiLevel;
         public Button uiEnemiesLeft;
+        public Button uiPos;
 
         private Point LastWorldPos;
 
@@ -51,7 +52,7 @@ namespace nullEngine.StateMachines
             //initialize list of entity updaters and the collision manager singleton
             updaters = new List<Action>();
             col = new Managers.CollisionManager(100);
-            int seed = 10; //Game.rng.Next();
+            int seed = 5; //Game.rng.Next();
             wMan = new Managers.WorldManager(seed, 10, 100, 10d, 64, col, new Point(0,0));
             Game.worldMaxX = wMan.worldMaxX;
             Game.worldMaxY = wMan.worldMaxY;
@@ -70,7 +71,7 @@ namespace nullEngine.StateMachines
             playerHealth = new cHealth(10, playerCharacter, this, 30);
             playerCharacter.AddComponent(playerHealth);
             playerCharacter.AddComponent(playerCollider);
-            playerCharacter.AddComponent(new cKeyboardMoveandCollide(5, playerCollider));
+            playerCharacter.AddComponent(new cKeyboardMoveandCollide(5, 1.5f, playerCollider));
             playerCharacter.AddComponent(playerBulletMan);
             playerCharacter.pos.xPos = Game.window.Width / 2 + 10;
             playerCharacter.pos.yPos = Game.window.Height / 2 + 10;
@@ -125,6 +126,10 @@ namespace nullEngine.StateMachines
             uiLevel = new Button("Level 00", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
             uiLevel.t.AddComponent(new cUILevel(uiLevel.t));
             updaters.Add(uiLevel.update);
+
+            uiPos = new Button("[0,0] {00,00}", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
+            uiPos.t.AddComponent(new cUIPosition(uiPos.t));
+            updaters.Add(uiPos.update);
         }
 
         //called whenever a state is entered
@@ -147,6 +152,17 @@ namespace nullEngine.StateMachines
                     toPauseState();
                 }
 
+                if (Game.input.KeyFallingEdge(OpenTK.Input.Key.G))
+                {
+                    wMan.currentChunk.inDungeon = true;
+                }
+
+                if (Game.input.KeyFallingEdge(OpenTK.Input.Key.B))
+                {
+                    wMan.currentChunk.inDungeon = false;
+                }
+
+
                 //run all entities update functions
                 for (int i = 0; i < updaters.Count; i++)
                 {
@@ -165,6 +181,7 @@ namespace nullEngine.StateMachines
             uiHealth.SetPos(new Point(Game.windowRect.X, Game.windowRect.Bottom - uiHealth.background.height * transform.masterScale));
             uiEnemiesLeft.SetPos(new Point(Game.windowRect.Right - uiEnemiesLeft.t.getWidth(), Game.windowRect.Bottom - uiEnemiesLeft.background.height * transform.masterScale));
             uiLevel.SetPos(new Point(Game.windowRect.X, Game.windowRect.Y));
+            uiPos.SetPos(new Point(Game.windowRect.X, Game.windowRect.Y + 48));
         }
 
         private void toPauseState()

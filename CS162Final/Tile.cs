@@ -24,6 +24,7 @@ namespace nullEngine
         public string type;
         public bool isCollideable;
         public bool isContainer;
+        public bool isRoad;
     }
 
 

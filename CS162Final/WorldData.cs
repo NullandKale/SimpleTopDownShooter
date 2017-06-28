@@ -15,6 +15,7 @@ namespace nullEngine
         public int chunkSize;
         public int worldSize;
         public List<VillageData> Villages;
+        public List<DungeonData> Dungeons;
         public TextureAtlas tAtlas
         {
             get
@@ -44,6 +45,7 @@ namespace nullEngine
             this.tAtlasLoc = TatlasLoc;
 
             Villages = new List<VillageData>();
+            Dungeons = new List<DungeonData>();
             tAtlasCache = new TextureAtlas(tAtlasLoc, 21, 9, 16, 16, 0);
         }
     }
@@ -54,17 +56,15 @@ namespace nullEngine
         public Point Loc;
         public Point ConnectedVillageLoc;
         public List<Point> roadChunks;
+        public Ray VillageToVillage;
     }
 
     [Serializable]
-    public struct DungeonData
+    public class DungeonData
     {
         public Point DoorChunkLoc;
         public Point DoorLoc;
-        public int sizeX;
-        public int sizeY;
-
-        public worldTile[,] backgroundTiles;
-        public worldTile[,] foregroundTiles;
+        public Ray doorToWall;
+        public int seed;
     }
 }

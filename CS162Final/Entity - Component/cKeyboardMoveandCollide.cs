@@ -13,9 +13,11 @@ namespace nullEngine.Entity___Component
     {
         private cCollider collider;
         private Managers.WorldManager wMan;
+        private float sprintMultiplyer;
 
-        public cKeyboardMoveandCollide(int speed, cCollider c) : base(speed)
+        public cKeyboardMoveandCollide(int speed, float sprintMultiplyer, cCollider c) : base(speed)
         {
+            this.sprintMultiplyer = sprintMultiplyer;
             collider = c;
             wMan = Managers.WorldManager.man;
         }
@@ -28,6 +30,7 @@ namespace nullEngine.Entity___Component
                 int yMove = 0;
 
                 bool moved = false;
+                bool sprinting = false;
 
                 if (Game.input.KeyHeld(Key.W))
                 {
@@ -49,9 +52,20 @@ namespace nullEngine.Entity___Component
                     xMove += speed;
                     moved = true;
                 }
+                if(Game.input.KeyHeld(Key.LShift))
+                {
+                    sprinting = true;
+                }
 
                 if (moved)
                 {
+
+                    if (sprinting)
+                    {
+                        xMove = (int)(xMove * sprintMultiplyer);
+                        yMove = (int)(yMove * sprintMultiplyer);
+                    }
+
                     Point p = Managers.CollisionManager.WillItCollide(collider, xMove, yMove);
 
                     p.X += (int)r.pos.xPos;

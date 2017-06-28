@@ -11,7 +11,7 @@ using nullEngine.Entity___Component;
 
 namespace nullEngine.WorldGen
 {
-    class WorldGenerator
+    public class WorldGenerator
     {
         public WorldData wData;
         private int tileSize;
@@ -29,11 +29,13 @@ namespace nullEngine.WorldGen
             this.tileSize = tileSize;
 
             wData = new WorldData(seed, worldSize, chunkSize, "Content/overworld.png");
+            Game.rng = new Random(seed);
+            GenerateWorldData();
         }
 
         public Chunk GenerateWorld(Point tempChunkPos)
         {
-            Chunk tempChunk = new Chunk(wData.chunkSize, tempChunkPos.X, tempChunkPos.Y);
+            Chunk tempChunk = new Chunk(wData.chunkSize, tempChunkPos.X, tempChunkPos.Y, wData);
             GenerateTerrain(tempChunk, tempChunkPos);
 
             return tempChunk;
@@ -88,7 +90,6 @@ namespace nullEngine.WorldGen
 
         private void GenerateTerrain(Chunk tempChunk, Point tempChunkPos)
         {
-            GenerateWorldData();
             double[,] height = new double[wData.chunkSize, wData.chunkSize];
 
             double maxHeight = 0;
@@ -139,11 +140,12 @@ namespace nullEngine.WorldGen
                         }
 
                         tempChunk.backgroundTiles[x, y].isCollideable = false;
+                        tempChunk.backgroundTiles[x, y].isRoad = false;
                         tempChunk.backgroundTiles[x, y].type = "grass";
                     }
                     else if (height[x, y] >= region0 && height[x, y] < region1)
                     {
-                        int tile = Game.rng.Next(0, 5);
+                        int tile = Game.rng.Next(0, 4);
 
                         if (tile == 0)
                         {
@@ -157,16 +159,13 @@ namespace nullEngine.WorldGen
                         {
                             tempChunk.backgroundTiles[x, y].graphics.TexID = (int)WorldTexID.sand2;
                         }
-                        else if (tile == 3)
+                        else
                         {
                             tempChunk.backgroundTiles[x, y].graphics.TexID = (int)WorldTexID.sand3;
                         }
-                        else
-                        {
-                            tempChunk.backgroundTiles[x, y].graphics.TexID = (int)WorldTexID.sand4;
-                        }
 
                         tempChunk.backgroundTiles[x, y].isCollideable = false;
+                        tempChunk.backgroundTiles[x, y].isRoad = false;
                         tempChunk.backgroundTiles[x, y].type = "sand";
                     }
                     else if (height[x, y] >= region1 && height[x, y] < region2)
@@ -183,25 +182,69 @@ namespace nullEngine.WorldGen
                         }
 
                         tempChunk.backgroundTiles[x, y].isCollideable = true;
+                        tempChunk.backgroundTiles[x, y].isRoad = false;
                         tempChunk.backgroundTiles[x, y].type = "water";
                     }
                     else
                     {
                         tempChunk.backgroundTiles[x, y].graphics.TexID = (int)WorldTexID.water2;
+
                         tempChunk.backgroundTiles[x, y].isCollideable = true;
+                        tempChunk.backgroundTiles[x, y].isRoad = false;
                         tempChunk.backgroundTiles[x, y].type = "water";
                     }
                 }
             }
-            nineSplice(tempChunk);
+            LayRoads(tempChunk);
+            NineSplice(tempChunk);
+
+            for(int i = 0; i < wData.Dungeons.Count; i++)
+            {
+                Console.WriteLine("Dungeon @ [" + wData.Dungeons[i].DoorChunkLoc.X + "," + wData.Dungeons[i].DoorChunkLoc.Y + "]");
+                if(wData.Dungeons[i].DoorChunkLoc.X / wData.chunkSize == tempChunkPos.X && wData.Dungeons[i].DoorChunkLoc.Y / wData.chunkSize == tempChunkPos.Y)
+                {
+                    tempChunk.hasDungeon = true;
+                    tempChunk.dungeon = GenerateDungeon(wData.Dungeons[i]);
+                }
+            }
         }
+
+        private void LayRoads(Chunk tempChunk)
+        {
+            worldTile roadTile = new worldTile();
+            roadTile.graphics = new Tile();
+            roadTile.graphics.tAtlas = wData.tAtlas;
+            roadTile.graphics.TexID = (int)WorldTexID.sand4;
+
+            roadTile.isCollideable = false;
+            roadTile.isContainer = false;
+            roadTile.type = "sand";
+            roadTile.isRoad = true;
+
+            for (int i = 0; i < wData.Villages.Count; i++)
+            {
+                Console.WriteLine("Village @ [" + wData.Villages[i].Loc.X + "," + wData.Villages[i].Loc.Y + "] [" + wData.Villages[i].ConnectedVillageLoc.X + "," + wData.Villages[i].ConnectedVillageLoc.Y + "]");
+                if(wData.Villages[i].roadChunks.Contains(tempChunk.key))
+                {
+                    List<Point> roadPoints = Ray.pointsIntersectingRect(wData.Villages[i].VillageToVillage, tempChunk.chunkRect);
+                    for(int j = 0; j < roadPoints.Count; j++)
+                    {
+                        Point realPoint = worldPosToChunkPos(roadPoints[j]);
+                        tempChunk.backgroundTiles[realPoint.X, realPoint.Y] = roadTile;
+                    }
+                }
+            }
+        }
+
+
 
         private void GenerateWorldData()
         {
             int numberVillages = 5;
+            int numberDungeons = 10;
 
             //Generate VillageLocations
-            for(int i = 0; i < numberVillages; i++)
+            for (int i = 0; i < numberVillages; i++)
             {
                 VillageData d = new VillageData();
                 d.Loc = GenerateVillageChunkLocation();
@@ -212,10 +255,36 @@ namespace nullEngine.WorldGen
             for (int j = 0; j < wData.Villages.Count; j++)
             {
                 wData.Villages[j].ConnectedVillageLoc = wData.Villages[Game.rng.Next(wData.Villages.Count)].Loc;
+                wData.Villages[j].VillageToVillage = new Ray(wData.Villages[j].Loc, wData.Villages[j].ConnectedVillageLoc);
+
+                for (int x = 0; x < wData.worldSize; x++)
+                {
+                    for (int y = 0; y < wData.worldSize; y++)
+                    {
+                        Rectangle chunkRect = new Rectangle(x * wData.chunkSize, y * wData.chunkSize, wData.chunkSize, wData.chunkSize);
+                        if (Ray.isIntersectingRect(wData.Villages[j].VillageToVillage, chunkRect))
+                        {
+                            if (wData.Villages[j].roadChunks == null)
+                            {
+                                wData.Villages[j].roadChunks = new List<Point>();
+                            }
+                            wData.Villages[j].roadChunks.Add(new Point(x, y));
+                        }
+                    }
+                }
+            }
+
+            for (int k = 0; k < numberDungeons; k++)
+            {
+                DungeonData d = new DungeonData();
+                d.DoorChunkLoc = GenerateDungeonLocation();
+                d.DoorLoc = new Point(d.DoorChunkLoc.X % 100, d.DoorChunkLoc.Y % 100);
+                d.seed = Game.rng.Next();
+                wData.Dungeons.Add(d);
             }
         }
 
-        private void nineSplice(Chunk tempChunk)
+        private void NineSplice(Chunk tempChunk)
         {
             List<nineSplice> templates = createNineSpliceTemplates();
             for (int x = 0; x < wData.chunkSize; x++)
@@ -248,7 +317,7 @@ namespace nullEngine.WorldGen
             grassTile.isCollideable = false;
             grassTile.isContainer = false;
 
-            worldTile sandTile;
+            worldTile sandTile = new worldTile();
             sandTile.graphics.tAtlas = wData.tAtlas;
             sandTile.graphics.TexID = (int)WorldTexID.sand0;
             sandTile.type = "sand";
@@ -812,25 +881,130 @@ namespace nullEngine.WorldGen
 
         }
 
+        private Chunk GenerateDungeon(DungeonData dData)
+        {
+            Random rng = new Random(dData.seed);
+            Point chunk = new Point(dData.DoorChunkLoc.X / 100, dData.DoorChunkLoc.Y / 100);
+            int randomFillPercent = 50;
+            int iterations = 5;
+            int xSize = rng.Next(20, 80);
+
+            Chunk tempChunk = new Chunk(xSize, chunk.X, chunk.Y);
+
+            worldTile wall = new worldTile();
+            wall.graphics = new Tile();
+            wall.graphics.tAtlas = wData.tAtlas;
+            wall.graphics.TexID = (int)WorldTexID.wall;
+            wall.isCollideable = true;
+            wall.isContainer = false;
+            wall.isRoad = false;
+            wall.type = "wall";
+
+            worldTile air = new worldTile();
+            air.graphics = new Tile();
+            air.graphics.tAtlas = wData.tAtlas;
+            air.graphics.TexID = (int)WorldTexID.air;
+            air.isCollideable = false;
+            air.isContainer = false;
+            air.isRoad = false;
+            air.type = "air";
+
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < xSize; y++)
+                {
+                    if(rng.Next(100) > randomFillPercent - 1)
+                    {
+                        tempChunk.backgroundTiles[x, y] = wall;
+                    }
+                    else
+                    {
+                        tempChunk.backgroundTiles[x, y] = air;
+                    }
+                }
+            }
+
+            for(int i = 0; i < iterations; i++)
+            {
+                for (int x = 0; x < xSize; x++)
+                {
+                    for (int y = 0; y < xSize; y++)
+                    {
+                        int neighbors = getNumberNeighbors(tempChunk, x, y, "wall", xSize);
+
+                        if (tempChunk.backgroundTiles[x, y].type == "wall")
+                        {
+                            if (neighbors >= 4)
+                            {
+                                tempChunk.backgroundTiles[x, y] = wall;
+                            }
+                        }
+                        else
+                        {
+                            if (neighbors >= 5)
+                            {
+                                tempChunk.backgroundTiles[x, y] = wall;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            return tempChunk;
+        }
+
+        private int getNumberNeighbors(Chunk tempChunk, int X, int Y, string type, int size)
+        {
+            int count = 0;
+
+            for(int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    if (!(i == 0 && j == 0))
+                    {
+                        if(isinChunk(size, X + i, Y + j))
+                        {
+                            if (tempChunk.backgroundTiles[X + i, Y + j].type == type)
+                            {
+                                count++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        private bool isinChunk(int max, int x, int y)
+        {
+            return !(x < 0 || x >= max || y < 0 || y >= max);
+        }
+
+        private Point GenerateDungeonLocation()
+        {
+            Point p = new Point(Game.rng.Next(wData.worldSize * wData.chunkSize), Game.rng.Next(wData.worldSize * wData.chunkSize));
+            for(int i = 0; i < wData.Dungeons.Count; i++)
+            {
+                if(wData.Dungeons[i].DoorChunkLoc == p)
+                {
+                    return GenerateDungeonLocation();
+                }
+            }
+
+            return p;
+        }
+
         private Point GenerateVillageChunkLocation()
         {
-            Point p = new Point(Game.rng.Next(wData.worldSize), Game.rng.Next(wData.worldSize));
+            Point p = new Point(Game.rng.Next(wData.worldSize * wData.chunkSize), Game.rng.Next(wData.worldSize * wData.chunkSize));
             for(int i = 0; i < wData.Villages.Count; i++)
             {
                 if(wData.Villages[i].Loc == p)
                 {
                     return GenerateVillageChunkLocation();
-                }
-            }
-
-            for (int i = 0; i < wData.Villages.Count; i++)
-            {
-                for(int x = 0; x < wData.worldSize; x++)
-                {
-                    for (int y = 0; y < wData.worldSize; y++)
-                    {
-                        Rectangle psuedoChunk = new Rectangle(x * wData.chunkSize, y * wData.chunkSize, wData.chunkSize, wData.chunkSize);
-                    }
                 }
             }
             return p;
@@ -839,6 +1013,11 @@ namespace nullEngine.WorldGen
         private bool isInChunk(int x, int y)
         {
             return !((x < 0 || x >= wData.chunkSize) || (y < 0 || y >= wData.chunkSize));
+        }
+
+        private bool isInWorld(int x, int y)
+        {
+            return !((x < 0 || x >= wData.worldSize) || (y < 0 || y >= wData.worldSize));
         }
 
         private Rectangle getChunkRect(Chunk c)
@@ -850,6 +1029,11 @@ namespace nullEngine.WorldGen
         private Point inChunkPosToWorldPos(Point p, Chunk c)
         {
             return new Point(c.key.X * wData.chunkSize + p.X, c.key.Y * wData.chunkSize + p.Y);
+        }
+
+        private Point worldPosToChunkPos(Point p)
+        {
+            return new Point(p.X % wData.chunkSize, p.Y % wData.chunkSize);
         }
 
         private Point inChunkPosToWorldPos(Point ChunkPos, Point WorldPos)

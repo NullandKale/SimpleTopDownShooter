@@ -90,6 +90,7 @@
     <Compile Include="Entity - Component\cUIEnemiesLeft.cs" />
     <Compile Include="Entity - Component\cUIHealth.cs" />
     <Compile Include="Entity - Component\cUILevel.cs" />
+    <Compile Include="Entity - Component\cUIPosition.cs" />
     <Compile Include="Entity - Component\iComponent.cs" />
     <Compile Include="Entity - Component\iRenderable.cs" />
     <Compile Include="Entity - Component\KeyboardControl.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Managers\WorldManager.cs" />
     <Compile Include="OpenSimplexNoise.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Ray.cs" />
     <Compile Include="StateMachines\DebugState.cs" />
     <Compile Include="StateMachines\GameState.cs" />
     <Compile Include="StateMachines\GameStateManager.cs" />

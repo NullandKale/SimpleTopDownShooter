@@ -51,7 +51,7 @@ namespace nullEngine.Managers
         private int tileSize;
         private double scale;
 
-        private WorldGen.WorldGenerator wGen;
+        public WorldGen.WorldGenerator wGen;
         private Dictionary<Point, Chunk> worldCache;
 
         public WorldManager(int seed, int worldSize, int chunkSize, double scale, int tileSize, CollisionManager collisionManager, Point curretChunk)
@@ -213,24 +213,32 @@ namespace nullEngine.Managers
 
         public bool ChunkOnDisk(Point loc)
         {
-            string chunkFile = GenChunkFileName(loc);
-            if(File.Exists(chunkFile))
+            if(!Game.doNotLoad)
             {
-                Stream stream = new FileStream(chunkFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-                if (stream.Length == 0)
+                string chunkFile = GenChunkFileName(loc);
+                if (File.Exists(chunkFile))
                 {
-                    stream.Close();
-                    return false;
+                    Stream stream = new FileStream(chunkFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    if (stream.Length == 0)
+                    {
+                        stream.Close();
+                        return false;
+                    }
+                    else
+                    {
+                        stream.Close();
+                        Console.WriteLine("Chunk on disk");
+                        return true;
+                    }
                 }
                 else
                 {
-                    stream.Close();
-                    Console.WriteLine("Chunk on disk");
-                    return true;
+                    return false;
                 }
             }
             else
             {
+                Console.WriteLine("Not loading chunks from disk");
                 return false;
             }
         }

@@ -96,5 +96,7 @@ namespace nullEngine
         stairsUp = 13,
         stairsDown = 14,
 
+        air = 188,
+        wall = 75,
     }
 }
