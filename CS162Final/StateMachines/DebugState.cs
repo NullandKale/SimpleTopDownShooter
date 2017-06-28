@@ -19,7 +19,7 @@ namespace nullEngine.StateMachines
         Point windowPos;
         Point lastWorldPos;
 
-        quad testWorld;
+        //quad testWorld;
 
         public DebugState()
         {

@@ -30,10 +30,8 @@ namespace nullEngine.StateMachines
         //player related game entities and components
         public quad playerCharacter;
         public cHealth playerHealth;
-        public quad[] bullets;
 
         //enemy related game entities and components
-        public quad[] badGuy;
 
         //UI elements
         public Button uiHealth;
@@ -76,38 +74,12 @@ namespace nullEngine.StateMachines
             playerCharacter.pos.xPos = Game.window.Width / 2 + 10;
             playerCharacter.pos.yPos = Game.window.Height / 2 + 10;
             playerCharacter.AddComponent(new cDEBUG_POS());
+            playerCharacter.AddComponent(new cRangedWeapon(playerCharacter, playerBulletMan, 10));
             playerCharacter.tag = "Player";
             updaters.Add(playerCharacter.update);
 
-            //initialize bullets
-            bullets = new quad[10];
-            for(int i = 0; i < bullets.Length; i++)
-            {
-                bullets[i] = new quad("Content/bullet.png");
-                bullets[i].active = false;
-                bullets[i].AddComponent(new cDeactivateOnCollide(bullets[i], playerCharacter));
-                bullets[i].AddComponent(new cDeactivateAfter(10000));
-                cFireable bulletFireable = new cFireable(bullets[i], 20);
-                bullets[i].AddComponent(bulletFireable);
-                playerBulletMan.addBullet(bulletFireable);
-                updaters.Add(bullets[i].update);
-            }
-
-            //initialize eneimes
-            badGuy = new quad[1000];
-            for (int j = 0; j < badGuy.Length; j++)
-            {
-                badGuy[j] = new quad("Content/roguelikeCharBeard_transparent.png");
-                cCollider badguyCollider = new cCollider(badGuy[j]);
-                badGuy[j].AddComponent(new cDamagePlayer(playerCharacter, playerHealth, 1, badguyCollider));
-                badGuy[j].AddComponent(badguyCollider);
-                badGuy[j].AddComponent(new cEnemyAI(3, badguyCollider, playerCharacter, 300));
-                badGuy[j].active = false;
-                updaters.Add(badGuy[j].update);
-            }
-
-            //initialize enemy managers
-            eMan = new Managers.EnemyManager(badGuy, playerCharacter);
+            //initialize enemy manager
+            eMan = new Managers.EnemyManager(playerCharacter, playerHealth, 1000);
             updaters.Add(eMan.update);
 
             //initialize UI entities
