@@ -131,7 +131,6 @@ namespace nullEngine
                     }
                 }
             }
-            Console.WriteLine("Path Point Count: " + temp.Count);
             return temp;
         }
 

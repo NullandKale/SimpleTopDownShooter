@@ -27,6 +27,8 @@ namespace nullEngine.Entity___Component
                 if (colliding[i].rRef != PC)
                 {
                     colliding[i].rRef.active = false;
+                    r.active = false;
+                    break;
                 }
             }
         }

@@ -36,7 +36,6 @@ namespace nullEngine.StateMachines
         //UI elements
         public Button uiHealth;
         public Button uiLevel;
-        public Button uiEnemiesLeft;
         public Button uiPos;
 
         private Point LastWorldPos;
@@ -90,10 +89,6 @@ namespace nullEngine.StateMachines
             uiHealth = new Button("Health: 00", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
             uiHealth.t.AddComponent(new cUIHealth(uiHealth.t, playerHealth));
             updaters.Add(uiHealth.update);
-
-            uiEnemiesLeft = new Button("00 enemies left", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
-            uiEnemiesLeft.t.AddComponent(new cUIEnemiesLeft(uiEnemiesLeft.t));
-            updaters.Add(uiEnemiesLeft.update);
 
             uiLevel = new Button("Level 00", Game.buttonBackground, "", OpenTK.Input.MouseButton.Left, this);
             uiLevel.t.AddComponent(new cUILevel(uiLevel.t));
@@ -151,7 +146,6 @@ namespace nullEngine.StateMachines
         private void updateUI()
         {
             uiHealth.SetPos(new Point(Game.windowRect.X, Game.windowRect.Bottom - uiHealth.background.height * transform.masterScale));
-            uiEnemiesLeft.SetPos(new Point(Game.windowRect.Right - uiEnemiesLeft.t.getWidth(), Game.windowRect.Bottom - uiEnemiesLeft.background.height * transform.masterScale));
             uiLevel.SetPos(new Point(Game.windowRect.X, Game.windowRect.Y));
             uiPos.SetPos(new Point(Game.windowRect.X, Game.windowRect.Y + 48));
         }

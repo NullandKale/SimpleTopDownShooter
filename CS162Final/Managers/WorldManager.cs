@@ -213,7 +213,7 @@ namespace nullEngine.Managers
 
         public bool ChunkOnDisk(Point loc)
         {
-            if(!Game.doNotLoad)
+            if(!Game.DEBUG_doNotLoad_SETTOFALSE)
             {
                 string chunkFile = GenChunkFileName(loc);
                 if (File.Exists(chunkFile))

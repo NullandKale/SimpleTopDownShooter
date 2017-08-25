@@ -57,6 +57,17 @@ namespace nullEngine.Managers
                 respawn(level);
             }
 
+            if(Game.tick == 0)
+            {
+                for(int i = 0; i < activeEnemies.Count; i++)
+                {
+                    if (!enemies[activeEnemies[i]].active)
+                    {
+                        spawn(activeEnemies[i], enemies[activeEnemies[i]]);
+                    }
+                }
+            }
+
             for(int i = 0; i < updaters.Count; i++)
             {
                 updaters[i].Invoke();
@@ -131,7 +142,7 @@ namespace nullEngine.Managers
         public void respawn(int level)
         {
             //get the number of enemies to spawn
-            int count = getEnemyCount(level) * 10;
+            int count = getEnemyCount(level) + 50;
 
             //if there are not enough enemies in the pool set the number of enemies to spawn to the number of enemies in the pool
             if(count > enemies.Length)
